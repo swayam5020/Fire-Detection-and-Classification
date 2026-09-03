@@ -1,0 +1,115 @@
+@import url('maplibre-gl/dist/maplibre-gl.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #0a0b0d;
+  color: #e8e9ea;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: rgba(224, 64, 47, 0.35);
+}
+
+/* scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2a2d32;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #3a3e44;
+}
+
+/* keyboard focus visibility */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 1.5px solid #e0402f;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Decorative dot-grid backdrop for the dashboard's map preview teaser
+   (MapPreviewCard.tsx) — not used by the real MapLibre map. */
+.map-preview-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* MapLibre chrome, restyled to match the dark technical palette */
+.maplibregl-ctrl-top-right {
+  top: 12px;
+  right: 12px;
+}
+
+.maplibregl-ctrl-group {
+  background: #121417 !important;
+  border: 1px solid #1f2226 !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+.maplibregl-ctrl-group button {
+  background-color: transparent !important;
+}
+
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid #1f2226 !important;
+}
+
+.maplibregl-ctrl button .maplibregl-ctrl-icon {
+  filter: invert(90%);
+}
+
+.maplibregl-popup-content {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.maplibregl-popup-tip {
+  display: none;
+}
+
+.maplibregl-ctrl-attrib {
+  background: rgba(10, 11, 13, 0.6) !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: #6f7278 !important;
+}
