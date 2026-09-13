@@ -33,7 +33,7 @@ export function AlertDetailPanel({ alert }: AlertDetailPanelProps) {
 
       <div className="flex flex-col gap-5 px-4 py-4">
         <Section title="Associated risk target">
-          <div className="flex items-center justify-between rounded-sm border border-base-700 bg-base-900 px-2.5 py-1.5">
+          <div className="flex items-center justify-between rounded-lg border border-base-700 bg-base-900 px-2.5 py-1.5">
             <span className="font-mono text-xs font-semibold text-ink-100">Cluster {alert.cluster_id}</span>
             <span className="text-2xs text-ink-500">{alert.location}</span>
           </div>
@@ -55,7 +55,7 @@ export function AlertDetailPanel({ alert }: AlertDetailPanelProps) {
         </Section>
 
         <Section title="Assigned dispatch team">
-          <div className="flex items-center justify-between rounded-sm border border-base-700 bg-base-900 px-2.5 py-1.5">
+          <div className="flex items-center justify-between rounded-lg border border-base-700 bg-base-900 px-2.5 py-1.5">
             <span className="text-xs font-semibold text-ink-100">{alert.assigned_team}</span>
             <span className="font-mono text-2xs font-semibold uppercase tracking-wider text-live">
               {TEAM_STATUS_LABEL[alert.assigned_team_status]}

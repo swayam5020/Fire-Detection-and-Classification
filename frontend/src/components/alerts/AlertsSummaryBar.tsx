@@ -26,7 +26,7 @@ export function AlertsSummaryBar({ alerts, severityFilter, onSeverityChange }: A
             type="button"
             onClick={() => onSeverityChange('all')}
             className={cn(
-              'rounded-sm border px-2 py-0.5 font-mono text-2xs uppercase tracking-wider transition-colors',
+              'rounded-lg border px-2 py-0.5 font-mono text-2xs uppercase tracking-wider transition-colors',
               severityFilter === 'all' ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
             )}
           >
@@ -38,7 +38,7 @@ export function AlertsSummaryBar({ alerts, severityFilter, onSeverityChange }: A
               type="button"
               onClick={() => onSeverityChange(sev)}
               className={cn(
-                'rounded-sm border px-2 py-0.5 font-mono text-2xs uppercase tracking-wider transition-colors',
+                'rounded-lg border px-2 py-0.5 font-mono text-2xs uppercase tracking-wider transition-colors',
                 severityFilter === sev ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
               )}
             >

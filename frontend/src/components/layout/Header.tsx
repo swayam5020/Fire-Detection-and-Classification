@@ -10,7 +10,7 @@ const NAV_ITEMS = [
 
 export function Header() {
   return (
-    <header className="flex h-20 flex-shrink-0 items-center justify-between border-b border-base-700 bg-base-950 px-4">
+    <header className="flex h-16 flex-shrink-0 items-center justify-between border-b border-base-700 bg-base-900 px-4">
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-2">
           <span className="block h-2 w-2 rounded-full bg-thermal" />
@@ -41,7 +41,7 @@ export function Header() {
           <span className="font-mono text-2xs font-semibold uppercase tracking-wider text-live">Live</span>
         </div>
         <NotificationBell />
-        <div className="hidden items-center gap-1.5 md:flex">
+        <div className="hidden items-center gap-1.5 border-l border-base-700 pl-4 md:flex">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-ink-400">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
           </svg>

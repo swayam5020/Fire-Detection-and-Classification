@@ -4,38 +4,42 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Neutral surface scale. 950 = page canvas (off-white), 900 = card
+        // surface (white), descending toward 500 = strongest border/divider.
         base: {
-          950: '#0a0b0d',
-          900: '#0e1013',
-          850: '#121417',
-          800: '#17191d',
-          700: '#1f2226',
-          600: '#2a2d32',
-          500: '#3a3e44',
+          950: '#f4f5f7',
+          900: '#ffffff',
+          850: '#f8f9fb',
+          800: '#eef0f3',
+          700: '#e2e4e9',
+          600: '#cdd1d7',
+          500: '#a8adb6',
         },
+        // Text scale. 100 = primary text (near-black), 500 = most muted
+        // label text — same emphasis ordering as before, lighter palette.
         ink: {
-          100: '#e8e9ea',
-          200: '#c7c9cc',
-          300: '#9a9da3',
-          400: '#6f7278',
-          500: '#54575c',
+          100: '#12151a',
+          200: '#30343b',
+          300: '#4b5058',
+          400: '#6b7078',
+          500: '#8a8f97',
         },
         thermal: {
-          DEFAULT: '#e0402f',
-          dim: '#7a2a22',
-          bright: '#ff5a3c',
+          DEFAULT: '#dc2626',
+          dim: '#fecaca',
+          bright: '#b91c1c',
         },
         risk: {
-          critical: '#e0402f',
-          high: '#d97a2b',
-          medium: '#c9a227',
-          low: '#4f8a5b',
+          critical: '#dc2626',
+          high: '#c2410c',
+          medium: '#a16207',
+          low: '#15803d',
         },
-        live: '#3fae5c',
+        live: '#15803d',
       },
       fontFamily: {
         mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'Roboto', '"Helvetica Neue"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         '2xs': ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.02em' }],

@@ -32,3 +32,17 @@ export function formatDuration(hours: number): string {
   if (hours < 24) return `${Math.round(hours)} hours continuous`;
   return `${(hours / 24).toFixed(1)} days continuous`;
 }
+
+const MISSING_VALUE = '—'; // em dash, used when a reading is unavailable
+
+export function formatTemperature(celsius: number | null | undefined): string {
+  return celsius == null ? MISSING_VALUE : `${celsius.toFixed(1)}°C`;
+}
+
+export function formatHumidity(pct: number | null | undefined): string {
+  return pct == null ? MISSING_VALUE : `${pct}%`;
+}
+
+export function formatSmokeLevel(level: 'low' | 'medium' | 'high' | null | undefined): string {
+  return level == null ? MISSING_VALUE : level.toUpperCase();
+}

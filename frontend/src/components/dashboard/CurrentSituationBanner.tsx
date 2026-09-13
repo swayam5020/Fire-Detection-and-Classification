@@ -12,21 +12,21 @@ export function CurrentSituationBanner({ activeClusters }: CurrentSituationBanne
   const criticalCount = activeClusters.filter((c) => c.risk_level === 'critical').length;
 
   return (
-    <div className={`flex items-center gap-4 rounded-sm border ${colors.border} ${colors.bg} px-5 py-4`}>
+    <div className={`flex h-full items-center gap-4 rounded-xl border ${colors.border} ${colors.bg} px-6 py-5`}>
       <span
-        className={`flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 ${colors.border} ${colors.text}`}
+        className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 bg-base-900 ${colors.border} ${colors.text}`}
       >
-        <WarningTriangleIcon className="h-7 w-7" />
+        <WarningTriangleIcon className="h-6 w-6" />
       </span>
-      <div>
+      <div className="min-w-0">
         <div className="font-mono text-2xs uppercase tracking-wider text-ink-500">Current situation</div>
         <div className={`font-mono text-2xl font-bold uppercase tracking-wider ${colors.text}`}>
           {SITUATION_LABELS[level]}
         </div>
-        <div className="mt-1 text-sm text-ink-300">
+        <div className="mt-0.5 text-xs text-ink-300">
           {activeClusters.length} active anomal{activeClusters.length === 1 ? 'y' : 'ies'}
         </div>
-        <div className="text-sm text-ink-400">
+        <div className="text-xs text-ink-400">
           {criticalCount} critical event{criticalCount === 1 ? '' : 's'}
         </div>
       </div>

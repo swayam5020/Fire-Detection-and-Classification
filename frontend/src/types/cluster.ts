@@ -28,6 +28,18 @@ export interface AdjacentFacility {
   distance_km: number;
 }
 
+/**
+ * Ground-sensor telemetry from an ESP32 unit co-located with a cluster, when
+ * one is deployed there. Not every cluster has a ground sensor — fields (and
+ * the object itself) are null when no reading exists, and the UI renders
+ * that as "—" rather than inventing a value.
+ */
+export interface Esp32Telemetry {
+  temperature_c: number | null;
+  humidity_pct: number | null;
+  smoke_level: 'low' | 'medium' | 'high' | null;
+}
+
 export interface ThermalCluster {
   cluster_id: string;
   centroid: ClusterCentroid;
@@ -52,6 +64,7 @@ export interface ThermalCluster {
   persistence_score: number; // 0-100
 
   facility: AdjacentFacility | null;
+  esp32: Esp32Telemetry | null;
 }
 
 export interface ClusterFilters {

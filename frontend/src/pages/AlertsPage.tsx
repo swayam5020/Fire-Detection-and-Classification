@@ -114,7 +114,7 @@ export function AlertsPage() {
       <button
         type="button"
         onClick={() => navigate(`/map?cluster=${latestAlert.cluster_id}`)}
-        className="mt-2 flex items-center justify-center gap-2 rounded-sm border border-thermal/50 bg-thermal/10 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-thermal transition-colors hover:bg-thermal/20"
+        className="mt-2 flex items-center justify-center gap-2 rounded-xl border border-thermal/50 bg-thermal/10 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-thermal transition-colors hover:bg-thermal/20"
       >
         View on map &rarr;
       </button>
@@ -124,7 +124,7 @@ export function AlertsPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-sm border border-base-700 bg-base-900 px-3 py-2">
+    <div className="rounded-lg border border-base-700 bg-base-900 px-3 py-2">
       <div className="font-mono text-2xs uppercase tracking-wider text-ink-500">{label}</div>
       <div className="mt-0.5 font-mono text-sm font-bold text-ink-100">{value}</div>
     </div>

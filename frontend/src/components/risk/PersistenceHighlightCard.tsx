@@ -7,7 +7,7 @@ interface PersistenceHighlightCardProps {
 
 export function PersistenceHighlightCard({ persistenceScore, durationHours }: PersistenceHighlightCardProps) {
   return (
-    <div className="rounded-sm border border-base-700 bg-base-900 px-4 py-3">
+    <div className="rounded-xl border border-base-700 bg-base-900 px-4 py-3">
       <div className="mb-1.5 font-mono text-2xs uppercase tracking-wider text-ink-500">Persistence</div>
       <div className="flex items-end justify-between gap-3">
         <span className="font-mono text-2xl font-bold leading-none text-ink-100">

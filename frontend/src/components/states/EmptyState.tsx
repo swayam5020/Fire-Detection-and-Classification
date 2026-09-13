@@ -17,7 +17,7 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
         <button
           type="button"
           onClick={action.onClick}
-          className="mt-2 rounded-sm border border-base-600 px-3 py-1 font-mono text-2xs uppercase tracking-wider text-ink-300 transition-colors hover:border-ink-400 hover:text-ink-100"
+          className="mt-2 rounded-lg border border-base-600 px-3 py-1 font-mono text-2xs uppercase tracking-wider text-ink-300 transition-colors hover:border-ink-400 hover:text-ink-100"
         >
           {action.label}
         </button>

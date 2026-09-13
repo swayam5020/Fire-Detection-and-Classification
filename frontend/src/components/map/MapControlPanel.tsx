@@ -37,7 +37,7 @@ export function MapControlPanel({ filters, onChange, clusters }: MapControlPanel
   const setAll = () => onChange({ ...filters, riskLevels: allActive ? [] : RISK_LEVELS });
 
   return (
-    <div className="absolute bottom-3 left-3 z-10 flex w-[320px] flex-col gap-3 rounded-sm border border-base-700 bg-base-950/95 px-4 py-3 backdrop-blur-sm">
+    <div className="absolute bottom-3 left-3 z-10 flex w-[320px] flex-col gap-3 rounded-xl border border-base-700 bg-base-950/95 px-4 py-3 backdrop-blur-sm">
       <div className="flex items-center gap-3">
         <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">Risk status</span>
         <LegendDot color={riskDotColor('critical')} label="High / Critical" />
@@ -54,7 +54,7 @@ export function MapControlPanel({ filters, onChange, clusters }: MapControlPanel
             type="button"
             onClick={setAll}
             className={cn(
-              'rounded-sm border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
+              'rounded-lg border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
               allActive ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
             )}
           >
@@ -68,7 +68,7 @@ export function MapControlPanel({ filters, onChange, clusters }: MapControlPanel
                 type="button"
                 onClick={() => toggleRisk(level)}
                 className={cn(
-                  'rounded-sm border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
+                  'rounded-lg border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
                   active ? RISK_BUTTON_ACTIVE[level] : 'border-base-600 text-ink-500 hover:text-ink-300'
                 )}
               >
@@ -90,7 +90,7 @@ export function MapControlPanel({ filters, onChange, clusters }: MapControlPanel
               type="button"
               onClick={() => onChange({ ...filters, timeRange: range })}
               className={cn(
-                'rounded-sm border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
+                'rounded-lg border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
                 filters.timeRange === range
                   ? 'border-ink-300 text-ink-100'
                   : 'border-base-600 text-ink-500 hover:text-ink-300'

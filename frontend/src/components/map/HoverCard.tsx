@@ -7,7 +7,7 @@ interface HoverCardProps {
 
 export function HoverCard({ cluster }: HoverCardProps) {
   return (
-    <div className="w-64 rounded-sm border border-base-600 bg-base-900 shadow-lg">
+    <div className="w-64 rounded-xl border border-base-600 bg-base-900 shadow-lg">
       <div className="flex items-center justify-between border-b border-base-700 px-3 py-2">
         <span className="font-mono text-xs font-semibold text-ink-100">Cluster: {cluster.cluster_id}</span>
         <RiskBadge level={cluster.risk_level} />

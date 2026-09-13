@@ -1,6 +1,7 @@
 import type { ThermalCluster } from '@/types/cluster';
 import { RiskHighlightCard } from '@/components/risk/RiskHighlightCard';
 import { PersistenceHighlightCard } from '@/components/risk/PersistenceHighlightCard';
+import { EspTelemetryCard } from './EspTelemetryCard';
 import { Section, Row } from '@/components/shared/InfoBlock';
 import { coordString, formatUtcDateTime } from '@/lib/utils';
 
@@ -25,7 +26,7 @@ export function DetailPanel({ cluster, onClose }: DetailPanelProps) {
           type="button"
           onClick={onClose}
           aria-label="Close detail panel"
-          className="rounded-sm border border-base-600 px-1.5 py-0.5 font-mono text-2xs text-ink-400 transition-colors hover:border-ink-400 hover:text-ink-100"
+          className="rounded-lg border border-base-600 px-1.5 py-0.5 font-mono text-2xs text-ink-400 transition-colors hover:border-ink-400 hover:text-ink-100"
         >
           ESC
         </button>
@@ -34,6 +35,7 @@ export function DetailPanel({ cluster, onClose }: DetailPanelProps) {
       <div className="flex flex-col gap-4 px-4 py-4">
         <RiskHighlightCard cluster={cluster} />
         <PersistenceHighlightCard persistenceScore={cluster.persistence_score} durationHours={cluster.duration_hours} />
+        <EspTelemetryCard esp32={cluster.esp32} />
 
         <Section title="AI classification">
           <span className="text-sm font-semibold text-ink-100">{cluster.classification_label}</span>

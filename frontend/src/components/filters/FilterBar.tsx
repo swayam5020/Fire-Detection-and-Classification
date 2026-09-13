@@ -25,7 +25,7 @@ export function FilterBar({ filters, onChange, clusters }: FilterBarProps) {
         <select
           value={filters.classifications[0] ?? 'all'}
           onChange={(e) => setClassification(e.target.value)}
-          className="rounded-sm border border-base-600 bg-base-900 px-2 py-0.5 font-mono text-2xs uppercase tracking-wider text-ink-300 outline-none focus:border-ink-400"
+          className="rounded-lg border border-base-600 bg-base-900 px-2 py-0.5 font-mono text-2xs uppercase tracking-wider text-ink-300 outline-none focus:border-ink-400"
         >
           <option value="all">All Infrastructure</option>
           {Object.entries(CLASSIFICATION_LABELS).map(([value, label]) => (

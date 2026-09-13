@@ -45,3 +45,18 @@ export const DASHBOARD_CLASSIFICATION_LABEL_OVERRIDES: Partial<Record<Classifica
 export function dashboardClassificationLabel(classification: ClassificationType): string {
   return DASHBOARD_CLASSIFICATION_LABEL_OVERRIDES[classification] ?? CLASSIFICATION_LABELS[classification];
 }
+
+/**
+ * Category color per classification — distinct from risk-level color, used
+ * anywhere a classification needs a visual accent (ClassificationCard icon
+ * circles, DetectionCard's icon tile). Shared here so the two never drift.
+ */
+const CLASSIFICATION_ACCENT_COLORS: Partial<Record<ClassificationType, string>> = {
+  industrial_fire: '#dc2626',
+  agricultural_burn: '#15803d',
+  wildfire: '#2563eb',
+};
+
+export function classificationAccentColor(classification: ClassificationType): string {
+  return CLASSIFICATION_ACCENT_COLORS[classification] ?? '#6b7078';
+}

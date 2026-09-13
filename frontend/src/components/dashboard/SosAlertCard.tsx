@@ -16,28 +16,31 @@ export function SosAlertCard({ activeClusters }: SosAlertCardProps) {
   const criticalCount = activeClusters.filter((c) => c.risk_level === 'critical').length;
 
   return (
-    <button
-      type="button"
-      onClick={() => navigate('/alert')}
-      className="flex h-full items-center gap-4 rounded-sm border border-thermal bg-thermal/10 px-5 py-4 text-left shadow-[0_0_24px_4px_rgba(224,64,47,0.25)] transition-colors hover:bg-thermal/15"
-    >
-      <span className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 border-thermal bg-thermal/20 text-thermal">
-        <BellIcon className="h-7 w-7" />
+    <div className="flex h-full items-center gap-4 rounded-xl border border-thermal/30 bg-thermal/5 px-6 py-5">
+      <span className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 border-thermal/30 bg-base-900 text-thermal">
+        <BellIcon className="h-6 w-6" />
         {activeClusters.length > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-base-950 bg-thermal font-mono text-[10px] font-bold text-ink-100">
+          <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-base-900 bg-thermal px-0.5 font-mono text-[10px] font-bold leading-none text-white">
             {activeClusters.length}
           </span>
         )}
       </span>
-      <div>
-        <div className="font-mono text-xl font-bold uppercase tracking-wider text-thermal">SOS Alert</div>
-        <div className="mt-1 text-sm text-ink-200">
+      <div className="min-w-0 flex-1">
+        <div className="font-mono text-xs font-bold uppercase tracking-wider text-thermal">SOS Alerts</div>
+        <div className="mt-0.5 text-xs text-ink-300">
           {activeClusters.length} active anomal{activeClusters.length === 1 ? 'y' : 'ies'}
         </div>
-        <div className="text-sm text-ink-400">
+        <div className="text-xs text-ink-400">
           {criticalCount} critical event{criticalCount === 1 ? '' : 's'}
         </div>
       </div>
-    </button>
+      <button
+        type="button"
+        onClick={() => navigate('/alert')}
+        className="flex flex-shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-base-600 bg-base-900 px-3 py-1.5 font-mono text-2xs font-bold uppercase tracking-wider text-ink-200 transition-colors hover:border-thermal hover:text-thermal"
+      >
+        View Alerts &rarr;
+      </button>
+    </div>
   );
 }

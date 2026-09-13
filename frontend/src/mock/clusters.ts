@@ -23,6 +23,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 48,
     persistence_score: 88,
     facility: { name: 'Bangkok East Oil Refinery', facility_type: 'Hazard Class-A Storage', distance_km: 2.3 },
+    esp32: null,
   },
   {
     cluster_id: 'CL-1049',
@@ -43,6 +44,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 30,
     persistence_score: 71,
     facility: { name: 'Kinshasa Timberyard Complex', facility_type: 'Timber Processing', distance_km: 0.8 },
+    esp32: null,
   },
   {
     cluster_id: 'CL-5049',
@@ -63,6 +65,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 3.2,
     persistence_score: 54,
     facility: { name: 'Maracaibo Storage Terminal', facility_type: 'Hazard Class-A Storage', distance_km: 1.1 },
+    esp32: null,
   },
   {
     cluster_id: 'CL-8831',
@@ -83,6 +86,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 21,
     persistence_score: 45,
     facility: null,
+    esp32: null,
   },
   {
     cluster_id: 'CL-0812',
@@ -103,6 +107,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 6,
     persistence_score: 33,
     facility: null,
+    esp32: null,
   },
   {
     cluster_id: 'CL-4412',
@@ -123,6 +128,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 3,
     persistence_score: 12,
     facility: null,
+    esp32: null,
   },
   {
     cluster_id: 'CL-1929',
@@ -143,6 +149,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 9,
     persistence_score: 61,
     facility: { name: 'Anzoátegui Offshore Platform 3', facility_type: 'Offshore Extraction', distance_km: 0.4 },
+    esp32: null,
   },
   {
     cluster_id: 'CL-3312',
@@ -163,6 +170,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 26.2,
     persistence_score: 58,
     facility: { name: 'Mombasa Industrial Yard 7', facility_type: 'Scrap / Metal Yard', distance_km: 0.2 },
+    esp32: null,
   },
   {
     cluster_id: 'CL-6620',
@@ -183,6 +191,7 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 10.4,
     persistence_score: 64,
     facility: { name: 'Nile Delta Petrochemical Complex', facility_type: 'Petrochemical Processing', distance_km: 1.6 },
+    esp32: null,
   },
   {
     cluster_id: 'CL-7734',
@@ -203,5 +212,6 @@ export const mockClusters: ThermalCluster[] = [
     duration_hours: 2,
     persistence_score: 9,
     facility: null,
+    esp32: null,
   },
 ];

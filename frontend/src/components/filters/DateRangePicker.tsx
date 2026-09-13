@@ -63,7 +63,7 @@ export function DateRangePicker({ value, active, triggerLabel, onChange }: DateR
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'rounded-sm border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
+          'rounded-lg border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
           active ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
         )}
       >
@@ -71,7 +71,7 @@ export function DateRangePicker({ value, active, triggerLabel, onChange }: DateR
       </button>
 
       {open && (
-        <div className="absolute bottom-full left-0 z-20 mb-2 w-60 rounded-sm border border-base-600 bg-base-900 p-3 shadow-xl">
+        <div className="absolute bottom-full left-0 z-20 mb-2 w-60 rounded-xl border border-base-600 bg-base-900 p-3 shadow-xl">
           <div className="mb-2 flex items-center justify-between">
             <button
               type="button"
@@ -110,7 +110,7 @@ export function DateRangePicker({ value, active, triggerLabel, onChange }: DateR
                   type="button"
                   onClick={() => handlePick(day)}
                   className={cn(
-                    'mx-auto flex h-6 w-6 items-center justify-center rounded-sm font-mono text-[10px] transition-colors',
+                    'mx-auto flex h-6 w-6 items-center justify-center rounded-md font-mono text-[10px] transition-colors',
                     isEdge
                       ? 'bg-thermal text-white'
                       : inRange
@@ -132,7 +132,7 @@ export function DateRangePicker({ value, active, triggerLabel, onChange }: DateR
               type="button"
               onClick={apply}
               disabled={!draftStart || !draftEnd}
-              className="rounded-sm border border-thermal/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-thermal transition-colors hover:bg-thermal/10 disabled:cursor-not-allowed disabled:opacity-30"
+              className="rounded-md border border-thermal/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-thermal transition-colors hover:bg-thermal/10 disabled:cursor-not-allowed disabled:opacity-30"
             >
               Apply
             </button>

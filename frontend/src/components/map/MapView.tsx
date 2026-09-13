@@ -21,7 +21,7 @@ const EMPTY_STYLE: maplibregl.StyleSpecification = {
     {
       id: 'bg',
       type: 'background',
-      paint: { 'background-color': '#0a0b0d' },
+      paint: { 'background-color': '#e6ebf1' },
     },
   ],
 };
@@ -59,13 +59,13 @@ export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapVie
           id: 'countries-fill',
           type: 'fill',
           source: 'countries',
-          paint: { 'fill-color': '#1a1d21' },
+          paint: { 'fill-color': '#d3d8e0' },
         });
         map.addLayer({
           id: 'countries-outline',
           type: 'line',
           source: 'countries',
-          paint: { 'line-color': '#2a2d32', 'line-width': 0.6 },
+          paint: { 'line-color': '#aeb5c0', 'line-width': 0.6 },
         });
       } catch {
         // Basemap geometry failed to load — the map still functions with
@@ -166,21 +166,21 @@ export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapVie
       <MapLegend />
       <style>{`
         .ts-marker {
-          width: 10px;
-          height: 10px;
+          width: 12px;
+          height: 12px;
           border-radius: 50%;
-          background-color: var(--marker-color, #d97a2b);
-          border: 1.5px solid rgba(10, 11, 13, 0.85);
+          background-color: var(--marker-color, #c2410c);
+          border: 2px solid #ffffff;
+          box-shadow: 0 1px 3px rgba(18, 21, 26, 0.35);
           cursor: pointer;
           padding: 0;
-          box-shadow: 0 0 0 0 rgba(0,0,0,0);
           transition: transform 120ms ease;
         }
         .ts-marker:hover {
           transform: scale(1.4);
         }
         .ts-marker.is-selected {
-          box-shadow: 0 0 0 3px rgba(224, 64, 47, 0.35);
+          box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
           transform: scale(1.3);
         }
       `}</style>

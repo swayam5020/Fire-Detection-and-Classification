@@ -18,7 +18,7 @@ export function RiskBadge({ level, size = 'sm', className }: RiskBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-sm border font-mono font-semibold uppercase tracking-wider',
+        'inline-flex items-center rounded-md border font-mono font-semibold uppercase tracking-wider',
         size === 'lg' ? 'px-2.5 py-1 text-xs' : 'px-1.5 py-0.5 text-2xs',
         RISK_STYLES[level],
         className
@@ -39,14 +39,14 @@ export const RISK_TEXT_CLASS: Record<RiskLevel, string> = {
 export function riskDotColor(level: RiskLevel): string {
   switch (level) {
     case 'critical':
-      return '#e0402f';
+      return '#dc2626';
     case 'high':
-      return '#d97a2b';
+      return '#c2410c';
     case 'medium':
-      return '#c9a227';
+      return '#a16207';
     case 'low':
-      return '#4f8a5b';
+      return '#15803d';
     default:
-      return '#6f7278';
+      return '#6b7078';
   }
 }

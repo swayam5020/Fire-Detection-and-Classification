@@ -16,7 +16,7 @@ const LEVEL_ACCENT_BORDER: Record<RiskLevel, string> = {
 export function RiskHighlightCard({ cluster }: RiskHighlightCardProps) {
   return (
     <div
-      className={`rounded-sm border-y border-r border-base-700 border-l-4 bg-base-900 px-4 py-3 ${LEVEL_ACCENT_BORDER[cluster.risk_level]}`}
+      className={`rounded-xl border-y border-r border-base-700 border-l-4 bg-base-900 px-4 py-3 ${LEVEL_ACCENT_BORDER[cluster.risk_level]}`}
     >
       <div className="mb-1.5 font-mono text-2xs uppercase tracking-wider text-ink-500">Risk</div>
 

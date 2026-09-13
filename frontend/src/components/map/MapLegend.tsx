@@ -1,10 +1,10 @@
 export function MapLegend() {
   return (
-    <div className="absolute bottom-3 left-3 flex items-center gap-3 rounded-sm border border-base-700 bg-base-950/90 px-3 py-1.5 backdrop-blur-sm">
+    <div className="absolute bottom-3 left-3 flex items-center gap-3 rounded-xl border border-base-700 bg-base-950/90 px-3 py-1.5 backdrop-blur-sm">
       <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">Risk status</span>
-      <LegendDot color="#e0402f" label="High / Critical" />
-      <LegendDot color="#c9a227" label="Medium" />
-      <LegendDot color="#4f8a5b" label="Low" />
+      <LegendDot color="#dc2626" label="High / Critical" />
+      <LegendDot color="#a16207" label="Medium" />
+      <LegendDot color="#15803d" label="Low" />
     </div>
   );
 }
