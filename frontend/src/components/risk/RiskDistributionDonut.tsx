@@ -33,7 +33,7 @@ export function RiskDistributionDonut({ activeClusters }: RiskDistributionDonutP
     <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
       <div className="relative flex-shrink-0" style={{ width: SIZE, height: SIZE }}>
         <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} className="-rotate-90">
-          <circle cx={SIZE / 2} cy={SIZE / 2} r={RADIUS} fill="none" stroke="#e2e4e9" strokeWidth={STROKE} />
+          <circle cx={SIZE / 2} cy={SIZE / 2} r={RADIUS} fill="none" stroke="#2a2f36" strokeWidth={STROKE} />
           {total > 0 &&
             counts.map(({ level, count }) => {
               if (count === 0) return null;

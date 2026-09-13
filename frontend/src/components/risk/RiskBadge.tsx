@@ -39,14 +39,14 @@ export const RISK_TEXT_CLASS: Record<RiskLevel, string> = {
 export function riskDotColor(level: RiskLevel): string {
   switch (level) {
     case 'critical':
-      return '#dc2626';
+      return '#ef4444';
     case 'high':
-      return '#c2410c';
+      return '#f97316';
     case 'medium':
-      return '#a16207';
+      return '#eab308';
     case 'low':
-      return '#15803d';
+      return '#22c55e';
     default:
-      return '#6b7078';
+      return '#888e96';
   }
 }

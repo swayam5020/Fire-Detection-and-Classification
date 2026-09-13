@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 * {
@@ -20,14 +20,14 @@ body,
 
 body {
   margin: 0;
-  background-color: #f4f5f7;
-  color: #12151a;
+  background-color: #0d0f12;
+  color: #f1f2f4;
   font-family: 'Inter', 'Roboto', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background-color: rgba(220, 38, 38, 0.18);
+  background-color: rgba(239, 68, 68, 0.28);
 }
 
 /* scrollbars */
@@ -39,18 +39,18 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #cdd1d7;
+  background-color: #3a4048;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #a8adb6;
+  background-color: #565d66;
 }
 
 /* keyboard focus visibility */
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {
-  outline: 1.5px solid #dc2626;
+  outline: 1.5px solid #ef4444;
   outline-offset: 2px;
 }
 
@@ -64,17 +64,17 @@ button:focus-visible,
   }
 }
 
-/* MapLibre chrome, restyled to match the light operational palette */
+/* MapLibre chrome, restyled to match the dark operational palette */
 .maplibregl-ctrl-top-right {
   top: 12px;
   right: 12px;
 }
 
 .maplibregl-ctrl-group {
-  background: #ffffff !important;
-  border: 1px solid #e2e4e9 !important;
+  background: #15181c !important;
+  border: 1px solid #2a2f36 !important;
   border-radius: 4px !important;
-  box-shadow: 0 1px 2px rgba(18, 21, 26, 0.08) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
 }
 
 .maplibregl-ctrl-group button {
@@ -82,7 +82,14 @@ button:focus-visible,
 }
 
 .maplibregl-ctrl-group button + button {
-  border-top: 1px solid #e2e4e9 !important;
+  border-top: 1px solid #2a2f36 !important;
+}
+
+/* MapLibre's built-in control icons (zoom, compass) are dark SVGs meant
+   for a light control background — invert them so they read on our dark
+   control panels. */
+.maplibregl-ctrl button .maplibregl-ctrl-icon {
+  filter: invert(90%);
 }
 
 .maplibregl-popup-content {
@@ -96,9 +103,9 @@ button:focus-visible,
 }
 
 .maplibregl-ctrl-attrib {
-  background: rgba(255, 255, 255, 0.7) !important;
+  background: rgba(13, 15, 18, 0.7) !important;
 }
 
 .maplibregl-ctrl-attrib a {
-  color: #6b7078 !important;
+  color: #888e96 !important;
 }

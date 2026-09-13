@@ -4,38 +4,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Neutral surface scale. 950 = page canvas (off-white), 900 = card
-        // surface (white), descending toward 500 = strongest border/divider.
+        // Neutral surface scale. 950 = page canvas (dark charcoal, not pure
+        // black), 900 = card surface (a shade lighter than the canvas),
+        // ascending toward 500 = strongest border/divider.
         base: {
-          950: '#f4f5f7',
-          900: '#ffffff',
-          850: '#f8f9fb',
-          800: '#eef0f3',
-          700: '#e2e4e9',
-          600: '#cdd1d7',
-          500: '#a8adb6',
+          950: '#0d0f12',
+          900: '#15181c',
+          850: '#1b1f24',
+          800: '#20242a',
+          700: '#2a2f36',
+          600: '#3a4048',
+          500: '#565d66',
         },
-        // Text scale. 100 = primary text (near-black), 500 = most muted
-        // label text — same emphasis ordering as before, lighter palette.
+        // Text scale. 100 = primary text (near-white), 500 = most muted
+        // label text — same emphasis ordering as before, dark palette.
         ink: {
-          100: '#12151a',
-          200: '#30343b',
-          300: '#4b5058',
-          400: '#6b7078',
-          500: '#8a8f97',
+          100: '#f1f2f4',
+          200: '#d4d7db',
+          300: '#aeb2b8',
+          400: '#888e96',
+          500: '#666d76',
         },
         thermal: {
-          DEFAULT: '#dc2626',
-          dim: '#fecaca',
-          bright: '#b91c1c',
+          DEFAULT: '#ef4444',
+          dim: '#7f1d1d',
+          bright: '#f87171',
         },
         risk: {
-          critical: '#dc2626',
-          high: '#c2410c',
-          medium: '#a16207',
-          low: '#15803d',
+          critical: '#ef4444',
+          high: '#f97316',
+          medium: '#eab308',
+          low: '#22c55e',
         },
-        live: '#15803d',
+        live: '#22c55e',
       },
       fontFamily: {
         mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],

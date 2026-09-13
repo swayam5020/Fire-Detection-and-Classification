@@ -13,10 +13,10 @@ interface EspTelemetryCardProps {
 // from cluster.esp32, never invented here.
 export function EspTelemetryCard({ esp32 }: EspTelemetryCardProps) {
   return (
-    <div className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3.5">
+    <div className="rounded-xl border border-sky-800/40 bg-sky-500/10 px-4 py-3.5">
       <div className="mb-3 flex items-center gap-1.5">
-        <SensorIcon className="h-4 w-4 text-sky-700" />
-        <span className="font-mono text-2xs font-bold uppercase tracking-wider text-sky-700">
+        <SensorIcon className="h-4 w-4 text-sky-400" />
+        <span className="font-mono text-2xs font-bold uppercase tracking-wider text-sky-400">
           Ground sensor &middot; ESP32
         </span>
       </div>
@@ -31,8 +31,8 @@ export function EspTelemetryCard({ esp32 }: EspTelemetryCardProps) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-sky-200 bg-white px-2 py-2 text-center">
-      <div className="font-mono text-[10px] uppercase tracking-wider text-sky-700/70">{label}</div>
+    <div className="rounded-lg border border-sky-800/30 bg-base-950 px-2 py-2 text-center">
+      <div className="font-mono text-[10px] uppercase tracking-wider text-sky-400/70">{label}</div>
       <div className="mt-0.5 font-mono text-base font-bold text-ink-100">{value}</div>
     </div>
   );
