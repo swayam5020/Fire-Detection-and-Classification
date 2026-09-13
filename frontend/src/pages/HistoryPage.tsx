@@ -3,6 +3,7 @@ import { useAlerts } from '@/hooks/useAlerts';
 import { AlertsSummaryBar } from '@/components/alerts/AlertsSummaryBar';
 import { AlertsTable } from '@/components/alerts/AlertsTable';
 import { AlertDetailPanel } from '@/components/alerts/AlertDetailPanel';
+import { AnomalyHistoryChart } from '@/components/alerts/AnomalyHistoryChart';
 import { LoadingState } from '@/components/states/LoadingState';
 import { ErrorState } from '@/components/states/ErrorState';
 import { EmptyState } from '@/components/states/EmptyState';
@@ -31,12 +32,12 @@ export function HistoryPage() {
   );
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-y-auto">
       {status === 'success' && (
         <AlertsSummaryBar alerts={alerts} severityFilter={severityFilter} onSeverityChange={setSeverityFilter} />
       )}
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex h-[60vh] min-h-[400px] flex-shrink-0">
         <div className="min-w-0 flex-1 overflow-y-auto">
           {status === 'loading' && <LoadingState label="Syncing historical records" />}
           {status === 'error' && <ErrorState message={error ?? 'Unable to reach the alerts API.'} onRetry={refetch} />}
@@ -62,6 +63,12 @@ export function HistoryPage() {
           </div>
         )}
       </div>
+
+      {status === 'success' && filteredAlerts.length > 0 && (
+        <div className="flex-shrink-0 border-t border-base-700 px-4 py-4">
+          <AnomalyHistoryChart alerts={filteredAlerts} />
+        </div>
+      )}
     </div>
   );
 }
