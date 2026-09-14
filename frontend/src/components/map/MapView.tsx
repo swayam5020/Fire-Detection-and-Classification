@@ -4,26 +4,13 @@ import { createRoot, type Root } from 'react-dom/client';
 import type { ThermalCluster } from '@/types/cluster';
 import { riskDotColor } from '@/components/risk/RiskBadge';
 import { HoverCard } from './HoverCard';
-import { loadWorldCountries } from '@/lib/basemap';
+import { SATELLITE_TERRAIN_STYLE } from '@/lib/mapStyle';
 
 interface MapViewProps {
   clusters: ThermalCluster[];
   selectedClusterId: string | null;
   onSelectCluster: (clusterId: string) => void;
 }
-
-const EMPTY_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-  sources: {},
-  layers: [
-    {
-      id: 'bg',
-      type: 'background',
-      paint: { 'background-color': '#0A2021' },
-    },
-  ],
-};
 
 export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -39,37 +26,20 @@ export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapVie
 
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: EMPTY_STYLE,
+      style: SATELLITE_TERRAIN_STYLE,
       center: [20, 15],
       zoom: 1.6,
       minZoom: 1,
-      maxZoom: 12,
+      maxZoom: 18,
       attributionControl: false,
     });
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    // OpenFreeMap's own credit already arrives via the vector source's
+    // TileJSON; the raster/DEM sources carry theirs in the style.
     map.addControl(new maplibregl.AttributionControl({ compact: true }));
 
-    map.on('load', async () => {
-      try {
-        const countries = await loadWorldCountries();
-        map.addSource('countries', { type: 'geojson', data: countries });
-        map.addLayer({
-          id: 'countries-fill',
-          type: 'fill',
-          source: 'countries',
-          paint: { 'fill-color': '#14272A' },
-        });
-        map.addLayer({
-          id: 'countries-outline',
-          type: 'line',
-          source: 'countries',
-          paint: { 'line-color': '#2A6F6B', 'line-width': 0.6 },
-        });
-      } catch {
-        // Basemap geometry failed to load — the map still functions with
-        // markers on a plain dark background.
-      }
+    map.on('load', () => {
       setMapReady(true);
     });
 
