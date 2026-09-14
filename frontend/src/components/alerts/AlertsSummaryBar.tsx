@@ -18,7 +18,7 @@ export function AlertsSummaryBar({ alerts, severityFilter, onSeverityChange }: A
     <div className="flex flex-col gap-1 rounded-lg bg-accent-header px-4 py-2.5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="font-mono text-[13px] font-bold uppercase leading-none tracking-[0.1em] text-white">
-          // Historical logs
+          Historical logs
         </span>
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-white/70">Severity:</span>

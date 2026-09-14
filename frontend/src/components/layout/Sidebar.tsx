@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { MonitorIcon, DocumentListIcon, GearIcon, GlobeIcon } from '@/components/dashboard/icons';
+import { MonitorIcon, DocumentListIcon, GearIcon, GlobeIcon, FlameIcon } from '@/components/dashboard/icons';
 
 const NAV_ITEMS = [
   { to: '/dash', label: 'Dashboard', icon: MonitorIcon },
+  { to: '/active-cases', label: 'Active Cases', icon: FlameIcon },
   { to: '/map', label: 'Monitoring Map', icon: GlobeIcon },
   { to: '/history', label: 'Historical Logs', icon: DocumentListIcon },
 ];

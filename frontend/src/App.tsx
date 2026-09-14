@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { DashboardPage } from '@/pages/DashboardPage';
+import { ActiveCasesPage } from '@/pages/ActiveCasesPage';
 import { MapPage } from '@/pages/MapPage';
 import { AlertsPage } from '@/pages/AlertsPage';
 import { HistoryPage } from '@/pages/HistoryPage';
@@ -23,6 +24,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Navigate to="/dash" replace />} />
                 <Route path="/dash" element={<DashboardPage />} />
+                <Route path="/active-cases" element={<ActiveCasesPage />} />
                 <Route path="/map" element={<MapPage />} />
                 <Route path="/alert" element={<AlertsPage />} />
                 <Route path="/history" element={<HistoryPage />} />

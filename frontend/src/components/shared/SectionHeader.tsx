@@ -10,7 +10,7 @@ interface SectionHeaderProps {
   labelClassName?: string;
 }
 
-// The "// LABEL" teal bar every module sits under in this theme. A plain
+// The teal label bar every module sits under in this theme. A plain
 // rounded rect, not fused to the card body below it — matches the
 // reference's treatment of the header as its own distinct strip.
 export function SectionHeader({ label, icon: Icon, right, className, labelClassName }: SectionHeaderProps) {
@@ -24,7 +24,7 @@ export function SectionHeader({ label, icon: Icon, right, className, labelClassN
             labelClassName ?? 'text-[10px] tracking-[0.12em]'
           )}
         >
-          // {label}
+          {label}
         </span>
       </div>
       {right && <div className="flex flex-shrink-0 items-center gap-2">{right}</div>}
