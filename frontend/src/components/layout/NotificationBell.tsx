@@ -1,22 +1,20 @@
-import { useNavigate } from 'react-router-dom';
 import { useNotificationCenter } from '@/hooks/useNotificationCenter';
 import { cn } from '@/lib/utils';
 
-// The bell is the entry point into /alert. Idle, it's a plain neutral
-// control; while there is an unread alert it shakes briefly and shows a
-// count badge, and calms down once the person has actually opened /alert
-// (see useNotificationCenter). It never animates when there is nothing new,
-// and no longer relies on a glow effect to read as "urgent" — the badge
-// count and shake are enough.
+// The bell is the entry point into the SOS alert queue modal. Idle, it's a
+// plain neutral control; while there is an unread alert it shakes briefly
+// and shows a count badge, and calms down once the person has opened the
+// SOS queue (see useNotificationCenter). It never animates when there is
+// nothing new, and no longer relies on a glow effect to read as "urgent" —
+// the badge count and shake are enough.
 export function NotificationBell() {
-  const navigate = useNavigate();
-  const { hasUnread, unreadCount, acknowledged } = useNotificationCenter();
+  const { hasUnread, unreadCount, acknowledged, openSosModal } = useNotificationCenter();
   const isAlerting = hasUnread && !acknowledged;
 
   return (
     <button
       type="button"
-      onClick={() => navigate('/alert')}
+      onClick={openSosModal}
       aria-label={isAlerting ? `${unreadCount} new critical thermal alert — open SOS Alerts` : 'Open SOS Alerts'}
       className={cn(
         'relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border transition-colors',

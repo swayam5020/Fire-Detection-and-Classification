@@ -4,7 +4,9 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { MapPage } from '@/pages/MapPage';
 import { AlertsPage } from '@/pages/AlertsPage';
 import { HistoryPage } from '@/pages/HistoryPage';
-import { NotificationProvider } from '@/hooks/useNotificationCenter';
+import { NotificationProvider, useNotificationCenter } from '@/hooks/useNotificationCenter';
+import { SosArrivalBanner } from '@/components/alerts/SosArrivalBanner';
+import { SosAlertModal } from '@/components/alerts/SosAlertModal';
 
 export default function App() {
   return (
@@ -21,7 +23,20 @@ export default function App() {
             <Route path="*" element={<Navigate to="/dash" replace />} />
           </Routes>
         </main>
+        <SosOverlays />
       </div>
     </NotificationProvider>
+  );
+}
+
+// Rendered once, above every route, so a new-alert banner and the SOS queue
+// modal work identically regardless of which page is currently active.
+function SosOverlays() {
+  const { latestArrival } = useNotificationCenter();
+  return (
+    <>
+      {latestArrival && <SosArrivalBanner alert={latestArrival} />}
+      <SosAlertModal />
+    </>
   );
 }

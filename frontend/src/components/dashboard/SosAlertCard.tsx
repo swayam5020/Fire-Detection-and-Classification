@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import type { ThermalCluster } from '@/types/cluster';
+import { useNotificationCenter } from '@/hooks/useNotificationCenter';
 import { BellIcon } from './icons';
 
 interface SosAlertCardProps {
@@ -7,12 +7,12 @@ interface SosAlertCardProps {
 }
 
 // Dashboard-specific alert summary. This is a visual, in-page entry point
-// into /alert alongside the header's global NotificationBell (which keeps
-// working exactly as before, on every route) — it doesn't replace or
-// reimplement the notification system, just reflects the same active-cluster
-// count already computed on this page.
+// into the SOS alert queue modal alongside the header's global
+// NotificationBell (which keeps working exactly as before, on every route)
+// — it doesn't replace or reimplement the notification system, just
+// reflects the same active-cluster count already computed on this page.
 export function SosAlertCard({ activeClusters }: SosAlertCardProps) {
-  const navigate = useNavigate();
+  const { openSosModal } = useNotificationCenter();
   const criticalCount = activeClusters.filter((c) => c.risk_level === 'critical').length;
 
   return (
@@ -36,7 +36,7 @@ export function SosAlertCard({ activeClusters }: SosAlertCardProps) {
       </div>
       <button
         type="button"
-        onClick={() => navigate('/alert')}
+        onClick={openSosModal}
         className="flex flex-shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-base-600 bg-base-900 px-3 py-1.5 font-mono text-2xs font-bold uppercase tracking-wider text-ink-200 transition-colors hover:border-thermal hover:text-thermal"
       >
         View Alerts &rarr;
