@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -20,14 +20,14 @@ body,
 
 body {
   margin: 0;
-  background-color: #0d0f12;
-  color: #f1f2f4;
+  background-color: #e8e1c9;
+  color: #0b2a2a;
   font-family: 'Inter', 'Roboto', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background-color: rgba(239, 68, 68, 0.28);
+  background-color: rgba(15, 91, 86, 0.3);
 }
 
 /* scrollbars */
@@ -39,18 +39,18 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #3a4048;
+  background-color: #b3a480;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #565d66;
+  background-color: #96875f;
 }
 
 /* keyboard focus visibility */
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {
-  outline: 1.5px solid #ef4444;
+  outline: 1.5px solid #0f5b56;
   outline-offset: 2px;
 }
 
@@ -64,32 +64,42 @@ button:focus-visible,
   }
 }
 
-/* MapLibre chrome, restyled to match the dark operational palette */
+/* MapLibre chrome — light cream floating controls over the dark teal
+   basemap (MapView.tsx), matching the reference's contrast treatment. */
 .maplibregl-ctrl-top-right {
   top: 12px;
   right: 12px;
 }
 
 .maplibregl-ctrl-group {
-  background: #15181c !important;
-  border: 1px solid #2a2f36 !important;
-  border-radius: 4px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+  background: #0f2f30 !important;
+  border: 1px solid #284b4d !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 6px rgba(7, 24, 23, 0.5) !important;
 }
 
 .maplibregl-ctrl-group button {
   background-color: transparent !important;
+  width: 30px !important;
+  height: 30px !important;
 }
 
 .maplibregl-ctrl-group button + button {
-  border-top: 1px solid #2a2f36 !important;
+  border-top: 1px solid #284b4d !important;
 }
 
-/* MapLibre's built-in control icons (zoom, compass) are dark SVGs meant
-   for a light control background — invert them so they read on our dark
-   control panels. */
-.maplibregl-ctrl button .maplibregl-ctrl-icon {
-  filter: invert(90%);
+.maplibregl-ctrl-group button:hover {
+  background-color: #14403f !important;
+}
+
+/* MapLibre ships dark zoom glyphs; repaint them in the key's Zoom Icon
+   colour (#E8E1C9) so they read on the dark control. */
+.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 29 29'%3E%3Cpath fill='%23E8E1C9' d='M14.5 8.5c-.75 0-1.5.75-1.5 1.5v3h-3c-.75 0-1.5.75-1.5 1.5S9.25 16 10 16h3v3c0 .75.75 1.5 1.5 1.5S16 19.75 16 19v-3h3c.75 0 1.5-.75 1.5-1.5S19.75 13 19 13h-3v-3c0-.75-.75-1.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+}
+
+.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 29 29'%3E%3Cpath fill='%23E8E1C9' d='M10 13c-.75 0-1.5.75-1.5 1.5S9.25 16 10 16h9c.75 0 1.5-.75 1.5-1.5S19.75 13 19 13h-9z'/%3E%3C/svg%3E") !important;
 }
 
 .maplibregl-popup-content {
@@ -103,9 +113,9 @@ button:focus-visible,
 }
 
 .maplibregl-ctrl-attrib {
-  background: rgba(13, 15, 18, 0.7) !important;
+  background: rgba(15, 47, 48, 0.75) !important;
 }
 
 .maplibregl-ctrl-attrib a {
-  color: #888e96 !important;
+  color: #9ab3ae !important;
 }

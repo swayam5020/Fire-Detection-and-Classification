@@ -7,7 +7,7 @@ interface AlertsSummaryBarProps {
   onSeverityChange: (value: SosAlert['severity'] | 'all') => void;
 }
 
-const SEVERITIES: SosAlert['severity'][] = ['critical', 'high', 'medium'];
+const SEVERITIES: SosAlert['severity'][] = ['critical', 'high', 'medium', 'low'];
 
 export function AlertsSummaryBar({ alerts, severityFilter, onSeverityChange }: AlertsSummaryBarProps) {
   const activeCount = alerts.filter((a) => a.status === 'active').length;
@@ -15,38 +15,47 @@ export function AlertsSummaryBar({ alerts, severityFilter, onSeverityChange }: A
   const resolvedCount = alerts.filter((a) => a.status === 'resolved').length;
 
   return (
-    <div className="flex items-center justify-between border-b border-base-700 bg-base-950 px-4 py-2">
-      <span className="font-mono text-2xs uppercase tracking-wider text-ink-400">
-        {activeCount} Active &middot; {ackCount} Acknowledged &middot; {resolvedCount} Resolved
-      </span>
-      <div className="flex items-center gap-2">
-        <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">Severity:</span>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onSeverityChange('all')}
-            className={cn(
-              'rounded-lg border px-2 py-0.5 font-mono text-2xs uppercase tracking-wider transition-colors',
-              severityFilter === 'all' ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
-            )}
-          >
-            All
-          </button>
-          {SEVERITIES.map((sev) => (
+    <div className="flex flex-col gap-1 rounded-lg bg-accent-header px-4 py-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="font-mono text-[13px] font-bold uppercase leading-none tracking-[0.1em] text-white">
+          // Historical logs
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-white/70">Severity:</span>
+          <div className="flex items-center gap-1">
             <button
-              key={sev}
               type="button"
-              onClick={() => onSeverityChange(sev)}
+              onClick={() => onSeverityChange('all')}
               className={cn(
-                'rounded-lg border px-2 py-0.5 font-mono text-2xs uppercase tracking-wider transition-colors',
-                severityFilter === sev ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
+                'rounded border px-2.5 py-1 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.08em] transition-colors',
+                severityFilter === 'all'
+                  ? 'border-white bg-white text-accent-dark'
+                  : 'border-white/40 text-white/75 hover:border-white hover:text-white'
               )}
             >
-              {sev}
+              All
             </button>
-          ))}
+            {SEVERITIES.map((sev) => (
+              <button
+                key={sev}
+                type="button"
+                onClick={() => onSeverityChange(sev)}
+                className={cn(
+                  'rounded border px-2.5 py-1 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.08em] transition-colors',
+                  severityFilter === sev
+                    ? 'border-white bg-white text-accent-dark'
+                    : 'border-white/40 text-white/75 hover:border-white hover:text-white'
+                )}
+              >
+                {sev}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
+      <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-white/70">
+        {activeCount} Active &middot; {ackCount} Acknowledged &middot; {resolvedCount} Resolved
+      </span>
     </div>
   );
 }

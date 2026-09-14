@@ -9,13 +9,56 @@ export const SITUATION_LABELS: Record<SituationLevel, string> = {
   critical: 'CRITICAL',
 };
 
-// Maps each situation level to the existing risk color language so the
-// banner reads consistently with risk badges elsewhere in the app.
-export const SITUATION_COLOR_CLASSES: Record<SituationLevel, { text: string; border: string; bg: string }> = {
-  normal: { text: 'text-live', border: 'border-live/40', bg: 'bg-live/10' },
-  elevated: { text: 'text-risk-medium', border: 'border-risk-medium/40', bg: 'bg-risk-medium/10' },
-  high_risk: { text: 'text-risk-high', border: 'border-risk-high/40', bg: 'bg-risk-high/10' },
-  critical: { text: 'text-risk-critical', border: 'border-risk-critical/40', bg: 'bg-risk-critical/10' },
+interface SituationStyle {
+  /** Solid card background. */
+  bg: string;
+  border: string;
+  /** The large level word. */
+  title: string;
+  /** Supporting count lines, always on the solid background. */
+  body: string;
+  iconBg: string;
+  iconText: string;
+}
+
+// A solid, high-contrast status card per level. The `critical` entry is the
+// design key's "Status Card (Critical)" spec verbatim (#881E1E background,
+// #EF4444 icon on a #FED7D7 tile, white body text); the other three levels
+// are the same treatment shifted onto each level's own risk hue, since the
+// key only illustrates the critical state.
+export const SITUATION_COLOR_CLASSES: Record<SituationLevel, SituationStyle> = {
+  normal: {
+    bg: 'bg-accent-dark',
+    border: 'border-risk-low',
+    title: 'text-risk-low',
+    body: 'text-white/85',
+    iconBg: 'bg-risk-low/25',
+    iconText: 'text-risk-low',
+  },
+  elevated: {
+    bg: 'bg-[#713F12]',
+    border: 'border-risk-medium',
+    title: 'text-risk-medium',
+    body: 'text-white/85',
+    iconBg: 'bg-risk-medium/25',
+    iconText: 'text-risk-medium',
+  },
+  high_risk: {
+    bg: 'bg-[#7C2D12]',
+    border: 'border-risk-high',
+    title: 'text-risk-high',
+    body: 'text-white/85',
+    iconBg: 'bg-risk-high/25',
+    iconText: 'text-risk-high',
+  },
+  critical: {
+    bg: 'bg-[#881E1E]',
+    border: 'border-[#EF4444]',
+    title: 'text-[#EF4444]',
+    body: 'text-white/85',
+    iconBg: 'bg-[#FED7D7]',
+    iconText: 'text-[#EF4444]',
+  },
 };
 
 const LEVEL_TO_SITUATION: Partial<Record<RiskLevel, SituationLevel>> = {

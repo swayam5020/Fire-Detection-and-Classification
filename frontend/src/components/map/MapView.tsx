@@ -4,7 +4,6 @@ import { createRoot, type Root } from 'react-dom/client';
 import type { ThermalCluster } from '@/types/cluster';
 import { riskDotColor } from '@/components/risk/RiskBadge';
 import { HoverCard } from './HoverCard';
-import { MapLegend } from './MapLegend';
 import { loadWorldCountries } from '@/lib/basemap';
 
 interface MapViewProps {
@@ -21,7 +20,7 @@ const EMPTY_STYLE: maplibregl.StyleSpecification = {
     {
       id: 'bg',
       type: 'background',
-      paint: { 'background-color': '#0b0d10' },
+      paint: { 'background-color': '#0A2021' },
     },
   ],
 };
@@ -59,13 +58,13 @@ export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapVie
           id: 'countries-fill',
           type: 'fill',
           source: 'countries',
-          paint: { 'fill-color': '#1c2126' },
+          paint: { 'fill-color': '#14272A' },
         });
         map.addLayer({
           id: 'countries-outline',
           type: 'line',
           source: 'countries',
-          paint: { 'line-color': '#343b42', 'line-width': 0.6 },
+          paint: { 'line-color': '#2A6F6B', 'line-width': 0.6 },
         });
       } catch {
         // Basemap geometry failed to load — the map still functions with
@@ -163,7 +162,6 @@ export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapVie
   return (
     <div className="relative h-full w-full">
       <div ref={containerRef} className="h-full w-full" />
-      <MapLegend />
       <style>{`
         .ts-marker {
           width: 12px;
@@ -180,7 +178,7 @@ export function MapView({ clusters, selectedClusterId, onSelectCluster }: MapVie
           transform: scale(1.4);
         }
         .ts-marker.is-selected {
-          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.4);
+          box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.4);
           transform: scale(1.3);
         }
       `}</style>

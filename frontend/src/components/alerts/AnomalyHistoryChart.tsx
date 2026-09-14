@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
 import type { SosAlert } from '@/types/alert';
 import { buildAnomalyHistory } from '@/lib/timeSeries';
+import { presetRangeBounds } from '@/lib/dateRange';
 import { BarChartIcon } from '@/components/dashboard/icons';
+import { SectionHeader } from '@/components/shared/SectionHeader';
+import { cn } from '@/lib/utils';
 
 interface AnomalyHistoryChartProps {
   /** Same list the table above renders — whatever filter is applied there
@@ -9,7 +12,17 @@ interface AnomalyHistoryChartProps {
   alerts: SosAlert[];
 }
 
-const LINE_COLOR = '#38bdf8'; // informational blue — distinct from risk semantics
+type TimeRangePreset = '24h' | '7d' | '30d' | 'all';
+const TIME_RANGES: TimeRangePreset[] = ['24h', '7d', '30d', 'all'];
+
+// Chart styles come straight from the history design key: a light-blue
+// trend over a dark panel, so this reads as the app's own signal rather
+// than a risk metric.
+const LINE_COLOR = '#38BDF8';
+const AREA_FILL = 'rgba(56, 189, 248, 0.2)';
+const GRID_COLOR = '#28484D';
+const AXIS_TEXT = '#94A388';
+const PANEL_BG = '#0B3D3A';
 const WIDTH = 800;
 const HEIGHT = 220;
 const PAD = { top: 16, right: 16, bottom: 28, left: 36 };
@@ -78,30 +91,69 @@ function monotoneCubicPath(points: Point[]): string {
 }
 
 // A single time-series line chart: real alert counts bucketed over time
-// (lib/timeSeries.ts), nothing invented. Subordinate to the table above —
-// one series, no legend needed, restrained styling matching the rest of
-// the app (rounded card, hairline grid, no gradients/glow).
+// (lib/timeSeries.ts), nothing invented. The time-range presets reuse the
+// exact same isWithinDateRange/presetRangeBounds helpers MapControlPanel
+// already uses, scoping which of the already-loaded alerts get bucketed —
+// no new data source, no fabricated history.
 export function AnomalyHistoryChart({ alerts }: AnomalyHistoryChartProps) {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [range, setRange] = useState<TimeRangePreset>('24h');
 
-  const history = useMemo(() => buildAnomalyHistory(alerts.map((a) => a.timestamp)), [alerts]);
+  const scopedAlerts = useMemo(() => {
+    if (range === 'all') return alerts;
+    const { startMs, endMs } = presetRangeBounds(range);
+    return alerts.filter((a) => {
+      const t = new Date(a.timestamp).getTime();
+      return t >= startMs && t <= endMs;
+    });
+  }, [alerts, range]);
+
+  const history = useMemo(() => buildAnomalyHistory(scopedAlerts.map((a) => a.timestamp)), [scopedAlerts]);
 
   return (
-    <div className="rounded-xl border border-base-700 bg-base-900 px-6 py-5">
-      <div className="mb-4 flex items-center gap-2">
-        <BarChartIcon className="h-4 w-4 text-ink-400" />
-        <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">Thermal Anomaly History</span>
-      </div>
+    <div className="flex flex-col gap-1.5">
+      <SectionHeader
+        label="Thermal anomaly history"
+        icon={BarChartIcon}
+        className="py-2"
+        labelClassName="text-[13px] tracking-[0.1em]"
+        right={
+          <div className="flex items-center gap-1">
+            {TIME_RANGES.map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => setRange(r)}
+                className={cn(
+                  'rounded border px-2.5 py-1 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.08em] transition-colors',
+                  range === r
+                    ? 'border-white bg-white text-accent-dark'
+                    : 'border-white/40 text-white/75 hover:border-white hover:text-white'
+                )}
+              >
+                {r === 'all' ? 'All' : r.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        }
+      />
 
-      {!history || history.buckets.length < 2 ? (
-        <div className="flex h-[160px] items-center justify-center rounded-lg border border-base-700 bg-base-950 px-4 text-center font-mono text-2xs text-ink-500">
-          {!history
-            ? 'No historical records for this filter.'
-            : `Not enough spread yet to chart a trend — ${history.buckets[0]?.count ?? 0} anomal${history.buckets[0]?.count === 1 ? 'y' : 'ies'} recorded at a single point in time.`}
-        </div>
-      ) : (
-        <Chart buckets={history.buckets} hoverIndex={hoverIndex} onHover={setHoverIndex} />
-      )}
+      <div className="rounded-lg border border-base-700 bg-base-900 p-3">
+        {!history || history.buckets.length < 2 ? (
+          <div
+            className="flex h-[160px] items-center justify-center rounded-md px-4 text-center font-mono text-[11px]"
+            style={{ backgroundColor: PANEL_BG, color: AXIS_TEXT }}
+          >
+            {!history
+              ? 'No historical records for this range.'
+              : `Not enough spread yet to chart a trend — ${history.buckets[0]?.count ?? 0} anomal${history.buckets[0]?.count === 1 ? 'y' : 'ies'} recorded at a single point in time.`}
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-md" style={{ backgroundColor: PANEL_BG }}>
+            <Chart buckets={history.buckets} hoverIndex={hoverIndex} onHover={setHoverIndex} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -178,8 +230,16 @@ function Chart({
         const y = yAt(tick);
         return (
           <g key={tick}>
-            <line x1={PAD.left} y1={y} x2={PAD.left + PLOT_W} y2={y} stroke="#2a2f36" strokeWidth={1} />
-            <text x={PAD.left - 8} y={y} textAnchor="end" dominantBaseline="middle" fontSize={10} fill="#666d76">
+            <line x1={PAD.left} y1={y} x2={PAD.left + PLOT_W} y2={y} stroke={GRID_COLOR} strokeWidth={1} />
+            <text
+              x={PAD.left - 8}
+              y={y}
+              textAnchor="end"
+              dominantBaseline="middle"
+              fontSize={11}
+              fontFamily='"Space Mono", monospace'
+              fill={AXIS_TEXT}
+            >
               {tick}
             </text>
           </g>
@@ -193,19 +253,20 @@ function Chart({
           x={points[i].x}
           y={HEIGHT - 8}
           textAnchor={i === 0 ? 'start' : i === points.length - 1 ? 'end' : 'middle'}
-          fontSize={10}
-          fill="#666d76"
+          fontSize={11}
+          fontFamily='"Space Mono", monospace'
+          fill={AXIS_TEXT}
         >
           {points[i].label}
         </text>
       ))}
 
       {/* Area wash + line */}
-      <path d={areaPath} fill={LINE_COLOR} fillOpacity={0.1} stroke="none" />
+      <path d={areaPath} fill={AREA_FILL} stroke="none" />
       <path d={linePath} fill="none" stroke={LINE_COLOR} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
 
       {/* End marker */}
-      <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r={4} fill={LINE_COLOR} stroke="#15181c" strokeWidth={2} />
+      <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r={4} fill={LINE_COLOR} stroke={PANEL_BG} strokeWidth={2} />
 
       {/* Hover layer */}
       {hovered && (
@@ -215,16 +276,23 @@ function Chart({
             y1={PAD.top}
             x2={hovered.x}
             y2={PAD.top + PLOT_H}
-            stroke="#666d76"
-            strokeOpacity={0.4}
+            stroke={AXIS_TEXT}
+            strokeOpacity={0.5}
             strokeWidth={1}
           />
-          <circle cx={hovered.x} cy={hovered.y} r={5} fill={LINE_COLOR} stroke="#15181c" strokeWidth={2} />
-          <rect x={tooltipX} y={tooltipY} width={tooltipW} height={tooltipH} rx={6} fill="#20242a" stroke="#3a4048" />
-          <text x={tooltipX + 10} y={tooltipY + 16} fontSize={12} fontWeight={700} fill="#f1f2f4">
+          <circle cx={hovered.x} cy={hovered.y} r={5} fill={LINE_COLOR} stroke={PANEL_BG} strokeWidth={2} />
+          <rect x={tooltipX} y={tooltipY} width={tooltipW} height={tooltipH} rx={6} fill="#082A2A" stroke={GRID_COLOR} />
+          <text
+            x={tooltipX + 10}
+            y={tooltipY + 16}
+            fontSize={12}
+            fontWeight={700}
+            fontFamily='"Space Mono", monospace'
+            fill="#FFFFFF"
+          >
             {hovered.count} anomal{hovered.count === 1 ? 'y' : 'ies'}
           </text>
-          <text x={tooltipX + 10} y={tooltipY + 30} fontSize={10} fill="#888e96">
+          <text x={tooltipX + 10} y={tooltipY + 30} fontSize={10} fontFamily='"Space Mono", monospace' fill={AXIS_TEXT}>
             {hovered.label}
           </text>
         </g>

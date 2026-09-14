@@ -19,18 +19,21 @@ export function ClassificationCard({ classification, label, totalCount, activeCo
       type="button"
       onClick={onClick}
       title={`${activeCount} active / ${totalCount} total`}
-      className="flex w-full items-center gap-3.5 rounded-xl border border-base-700 bg-base-900 px-4 py-3.5 text-left transition-colors hover:border-ink-400"
+      className="flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-[filter] hover:brightness-[0.97]"
+      style={{ borderColor: `${color}59`, backgroundColor: `${color}1f` }}
     >
       <span
-        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2"
-        style={{ borderColor: `${color}55`, color, backgroundColor: `${color}0f` }}
+        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md"
+        style={{ color, backgroundColor: `${color}2e` }}
       >
-        <Icon className="h-5.5 w-5.5" />
+        <Icon className="h-6 w-6" />
       </span>
       <div className="min-w-0">
-        <div className="truncate font-mono text-2xs font-semibold uppercase tracking-wider text-ink-300">{label}</div>
-        <div className="font-mono text-2xl font-bold text-ink-100">{activeCount}</div>
-        <div className="font-mono text-2xs text-ink-500">active case{activeCount === 1 ? '' : 's'}</div>
+        <div className="truncate font-mono text-[13px] font-bold leading-none text-ink-200">{label}</div>
+        <div className="mt-1.5 font-mono text-[26px] font-bold leading-none text-ink-100">{activeCount}</div>
+        <div className="mt-1.5 font-mono text-[12px] leading-none text-ink-400">
+          active case{activeCount === 1 ? '' : 's'}
+        </div>
       </div>
     </button>
   );

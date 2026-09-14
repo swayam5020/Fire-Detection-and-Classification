@@ -4,10 +4,13 @@ import { RiskBadge, RISK_TEXT_CLASS } from '@/components/risk/RiskBadge';
 import { dashboardClassificationLabel, classificationAccentColor } from '@/lib/classification';
 import { classificationIcon } from './icons';
 import { coordString, formatRelativeShort, formatTemperature, formatHumidity, formatSmokeLevel } from '@/lib/utils';
+import { SectionHeader } from '@/components/shared/SectionHeader';
+import { StaticMapPreview } from './StaticMapPreview';
 
 interface DetectionCardProps {
   title: string;
   icon: (props: SVGProps<SVGSVGElement>) => React.JSX.Element;
+  actionLabel: string;
   cluster: ThermalCluster | null;
   emptyMessage: string;
   onSelectCluster: (clusterId: string) => void;
@@ -15,55 +18,74 @@ interface DetectionCardProps {
 
 // Shared presentation for the two Row 3 detection summaries (latest and
 // highest-risk). Both show the same fields — Risk Score, Persistence, and
-// ESP32 ground-sensor telemetry when a sensor is deployed there — so the
-// layout is defined once and driven by whichever cluster the caller resolves.
-export function DetectionCard({ title, icon: Icon, cluster, emptyMessage, onSelectCluster }: DetectionCardProps) {
+// ESP32 ground-sensor telemetry when a sensor is deployed there — plus a
+// seeded map preview (StaticMapPreview). The preview is artwork only; the
+// action below it still routes to the real interactive map with this
+// cluster selected.
+export function DetectionCard({ title, icon: Icon, actionLabel, cluster, emptyMessage, onSelectCluster }: DetectionCardProps) {
   return (
-    <div className="flex h-full flex-col rounded-xl border border-base-700 bg-base-900 px-6 py-5">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Icon className="h-4 w-4 text-ink-400" />
-          <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">{title}</span>
-        </div>
-        {cluster && <span className="font-mono text-2xs text-ink-500">{formatRelativeShort(cluster.timestamp)}</span>}
-      </div>
+    <div className="flex h-full flex-col gap-1.5">
+      <SectionHeader
+        label={title}
+        icon={Icon}
+        right={
+          cluster && <span className="font-mono text-[10px] text-white/75">{formatRelativeShort(cluster.timestamp)}</span>
+        }
+      />
+      <div className="flex-1 rounded-xl border border-base-700 bg-base-900 p-3">
+        {!cluster ? (
+          <div className="flex h-full items-center rounded-lg border border-base-700 bg-base-950 px-4 py-3 text-2xs text-ink-500">
+            {emptyMessage}
+          </div>
+        ) : (
+          <div className="flex h-full flex-col gap-3 lg:flex-row">
+            <div className="flex flex-col gap-2 lg:w-[252px] lg:flex-shrink-0">
+              <button type="button" onClick={() => onSelectCluster(cluster.cluster_id)} className="flex items-start gap-2.5 text-left">
+                <ClassificationTile classification={cluster.classification} />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-[13px] font-bold leading-none text-ink-100">{cluster.cluster_id}</span>
+                    <RiskBadge level={cluster.risk_level} tone="solid" />
+                  </div>
+                  <div className="mt-1.5 truncate text-[13px] font-semibold leading-tight text-ink-100">
+                    {dashboardClassificationLabel(cluster.classification)}
+                  </div>
+                  <div className="truncate font-mono text-[11px] leading-tight text-ink-400">{cluster.region}</div>
+                  <div className="mt-0.5 truncate font-mono text-[10px] leading-tight text-ink-500">
+                    {coordString(cluster.centroid.lat, cluster.centroid.lon)}
+                  </div>
+                </div>
+              </button>
 
-      {!cluster ? (
-        <div className="flex flex-1 items-center rounded-lg border border-base-700 bg-base-950 px-4 py-3 text-2xs text-ink-500">
-          {emptyMessage}
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => onSelectCluster(cluster.cluster_id)}
-          className="grid flex-1 grid-cols-1 gap-4 text-left lg:grid-cols-[260px_minmax(0,1fr)] lg:items-center lg:gap-5"
-        >
-          <div className="flex min-w-0 items-center gap-3.5">
-            <ClassificationTile classification={cluster.classification} />
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-sm font-bold text-ink-100">{cluster.cluster_id}</span>
-                <RiskBadge level={cluster.risk_level} />
+              <div className="grid grid-cols-2 gap-2">
+                <Metric label="Risk Score" value={cluster.risk_score} suffix="/100" valueClass={RISK_TEXT_CLASS[cluster.risk_level]} />
+                <Metric label="Persistence" value={cluster.persistence_score} suffix="/100" />
               </div>
-              <div className="mt-0.5 truncate text-sm font-medium text-ink-200">
-                {dashboardClassificationLabel(cluster.classification)}
+              <div className="grid grid-cols-3 gap-2">
+                <Metric label="Temperature" value={formatTemperature(cluster.esp32?.temperature_c)} sub="ESP32" compact />
+                <Metric label="Humidity" value={formatHumidity(cluster.esp32?.humidity_pct)} sub="ESP32" compact />
+                <Metric label="Smoke Level" value={formatSmokeLevel(cluster.esp32?.smoke_level)} sub="ESP32" compact />
               </div>
-              <div className="truncate text-xs text-ink-400">{cluster.region}</div>
-              <div className="mt-0.5 font-mono text-2xs text-ink-500">
-                {coordString(cluster.centroid.lat, cluster.centroid.lon)}
+            </div>
+
+            <div className="relative min-h-[168px] flex-1 overflow-hidden rounded-lg border border-base-700">
+              <StaticMapPreview cluster={cluster} />
+              <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-2">
+                <span className="min-w-0 truncate rounded-md bg-base-900/95 px-2 py-1 font-mono text-[10px] text-ink-200">
+                  {cluster.region}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onSelectCluster(cluster.cluster_id)}
+                  className="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-base-700 bg-base-900 px-2.5 py-1.5 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.06em] text-ink-100 shadow-sm transition-colors hover:bg-base-850"
+                >
+                  {actionLabel} &rarr;
+                </button>
               </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-            <Metric label="Risk Score" value={cluster.risk_score} suffix="/100" valueClass={RISK_TEXT_CLASS[cluster.risk_level]} />
-            <Metric label="Persistence" value={cluster.persistence_score} suffix="/100" />
-            <Metric label="Temperature" value={formatTemperature(cluster.esp32?.temperature_c)} sub="ESP32" />
-            <Metric label="Humidity" value={formatHumidity(cluster.esp32?.humidity_pct)} sub="ESP32" />
-            <Metric label="Smoke Level" value={formatSmokeLevel(cluster.esp32?.smoke_level)} sub="ESP32" />
-          </div>
-        </button>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -77,10 +99,10 @@ function ClassificationTile({ classification }: { classification: ThermalCluster
   const Icon = classificationIcon(classification);
   return (
     <span
-      className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg"
-      style={{ backgroundColor: `${color}14`, color }}
+      className="flex h-[62px] w-[62px] flex-shrink-0 items-center justify-center rounded-md bg-accent-dark"
+      style={{ color: `${color}` }}
     >
-      <Icon className="h-7 w-7" />
+      <Icon className="h-7 w-7" style={{ filter: 'drop-shadow(0 0 6px currentColor)' }} />
     </span>
   );
 }
@@ -91,21 +113,25 @@ function Metric({
   suffix,
   sub,
   valueClass,
+  compact,
 }: {
   label: string;
   value: string | number;
   suffix?: string;
   sub?: string;
   valueClass?: string;
+  compact?: boolean;
 }) {
   return (
-    <div className="flex min-h-[68px] flex-col items-center justify-center rounded-lg border border-base-700 bg-base-950 px-2 py-2 text-center">
-      <div className="font-mono text-2xs uppercase tracking-wider text-ink-500">{label}</div>
-      <div className={`mt-0.5 font-mono text-sm font-bold ${valueClass ?? 'text-ink-100'}`}>
-        {value}
-        {suffix && <span className="text-2xs font-normal text-ink-500">{suffix}</span>}
+    <div className="rounded-md border border-base-800 bg-base-850 px-2 py-1.5">
+      <div className="truncate font-mono text-[9px] uppercase leading-none text-ink-400">{label}</div>
+      <div className="mt-1.5 flex items-baseline gap-0.5">
+        <span className={`font-mono font-bold leading-none ${compact ? 'text-[16px]' : 'text-[19px]'} ${valueClass ?? 'text-ink-100'}`}>
+          {value}
+        </span>
+        {suffix && <span className="font-mono text-[10px] leading-none text-ink-400">{suffix}</span>}
       </div>
-      {sub && <div className="font-mono text-[10px] uppercase tracking-wider text-ink-500">{sub}</div>}
+      {sub && <div className="mt-1.5 font-mono text-[9px] uppercase leading-none tracking-[0.06em] text-ink-500">{sub}</div>}
     </div>
   );
 }

@@ -11,7 +11,7 @@ export function StatStrip({ clusters }: StatStripProps) {
   const regionCount = new Set(clusters.map((c) => c.region)).size;
 
   return (
-    <div className="grid flex-shrink-0 grid-cols-2 gap-px border-t border-base-700 bg-base-700 sm:grid-cols-4">
+    <div className="grid flex-shrink-0 grid-cols-2 gap-px overflow-hidden rounded-lg border border-base-700 bg-base-700 sm:grid-cols-4">
       <Stat label="Active anomalies" value={String(activeCount)} note="+3 in last 24h" />
       <Stat label="High-risk detected" value={String(highRiskCount).padStart(2, '0')} note="Immediate attention" accent="high" />
       <Stat label="Critical SOS alerts" value={String(criticalCount).padStart(2, '0')} note="Response active" accent="critical" />
@@ -33,10 +33,10 @@ function Stat({
 }) {
   const valueColor = accent === 'critical' ? 'text-risk-critical' : accent === 'high' ? 'text-risk-high' : 'text-ink-100';
   return (
-    <div className="bg-base-950 px-4 py-2.5">
-      <div className="font-mono text-2xs uppercase tracking-wider text-ink-500">{label}</div>
-      <div className={`font-mono text-lg font-bold ${valueColor}`}>{value}</div>
-      <div className="text-2xs text-ink-500">{note}</div>
+    <div className="bg-base-900 px-4 py-2.5">
+      <div className="font-mono text-[9px] uppercase leading-none tracking-[0.08em] text-ink-400">{label}</div>
+      <div className={`mt-1.5 font-mono text-[22px] font-bold leading-none ${valueColor}`}>{value}</div>
+      <div className="mt-1.5 text-[10px] leading-none text-ink-400">{note}</div>
     </div>
   );
 }

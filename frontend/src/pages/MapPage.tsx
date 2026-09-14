@@ -128,49 +128,47 @@ export function MapPage() {
   );
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
-      {status === 'success' && <FilterBar filters={filters} onChange={setFilters} clusters={clusters} />}
+    <div className="flex h-full overflow-hidden bg-base-950">
+      <div className="flex min-w-0 flex-[3] flex-col gap-2 px-3 py-2.5">
+        {status === 'success' && <FilterBar filters={filters} onChange={setFilters} clusters={clusters} />}
 
-      <div className="flex min-h-0 flex-1">
-        <div className="flex min-w-0 flex-[3] flex-col">
-          <div className="relative min-h-0 flex-1">
-            {status === 'loading' && <LoadingState label="Establishing satellite feed" />}
-            {status === 'error' && <ErrorState message={error ?? 'Unable to reach the intelligence API.'} onRetry={refetch} />}
-            {status === 'success' && filteredClusters.length === 0 && (
-              <EmptyState
-                title="No anomalies match these filters"
-                description="Try widening the risk level or infrastructure type filters."
-                action={{ label: 'Reset filters', onClick: () => setFilters(baseFilters()) }}
-              />
-            )}
-            {status === 'success' && filteredClusters.length > 0 && (
-              <MapView
-                clusters={filteredClusters}
-                selectedClusterId={selectedClusterId}
-                onSelectCluster={setSelectedClusterId}
-              />
-            )}
-            {status === 'success' && (
-              <MapControlPanel filters={filters} onChange={setFilters} clusters={clusters} />
-            )}
-          </div>
-          {status === 'success' && <StatStrip clusters={filteredClusters} />}
-        </div>
-
-        <div className="min-w-[300px] max-w-[380px] flex-1 flex-shrink-0">
-          {status === 'success' && selectedCluster ? (
-            <DetailPanel
-              cluster={selectedCluster}
-              onClose={() => defaultClusterId && setSelectedClusterId(defaultClusterId)}
+        <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg border border-[#1F3A3C] bg-[#0A2021]">
+          {status === 'loading' && <LoadingState label="Establishing satellite feed" />}
+          {status === 'error' && <ErrorState message={error ?? 'Unable to reach the intelligence API.'} onRetry={refetch} />}
+          {status === 'success' && filteredClusters.length === 0 && (
+            <EmptyState
+              title="No anomalies match these filters"
+              description="Try widening the risk level or infrastructure type filters."
+              action={{ label: 'Reset filters', onClick: () => setFilters(baseFilters()) }}
             />
-          ) : (
-            <aside className="flex h-full w-full flex-col items-center justify-center gap-2 border-l border-base-700 bg-base-950 px-4 text-center">
-              <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">
-                {status === 'loading' ? 'Awaiting target data' : 'No target selected'}
-              </span>
-            </aside>
+          )}
+          {status === 'success' && filteredClusters.length > 0 && (
+            <MapView
+              clusters={filteredClusters}
+              selectedClusterId={selectedClusterId}
+              onSelectCluster={setSelectedClusterId}
+            />
+          )}
+          {status === 'success' && (
+            <MapControlPanel filters={filters} onChange={setFilters} clusters={clusters} />
           )}
         </div>
+        {status === 'success' && <StatStrip clusters={filteredClusters} />}
+      </div>
+
+      <div className="min-w-[300px] max-w-[340px] flex-1 flex-shrink-0">
+        {status === 'success' && selectedCluster ? (
+          <DetailPanel
+            cluster={selectedCluster}
+            onClose={() => defaultClusterId && setSelectedClusterId(defaultClusterId)}
+          />
+        ) : (
+          <aside className="flex h-full w-full flex-col items-center justify-center gap-2 border-l border-base-700 bg-base-950 px-4 text-center">
+            <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">
+              {status === 'loading' ? 'Awaiting target data' : 'No target selected'}
+            </span>
+          </aside>
+        )}
       </div>
     </div>
   );

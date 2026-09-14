@@ -17,8 +17,8 @@ export function NotificationBell() {
       onClick={openSosModal}
       aria-label={isAlerting ? `${unreadCount} new critical thermal alert — open SOS Alerts` : 'Open SOS Alerts'}
       className={cn(
-        'relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border transition-colors',
-        'border-base-600 bg-base-900 text-ink-200 hover:border-ink-400 hover:text-ink-100'
+        'relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border transition-colors',
+        'border-white/30 bg-white/10 text-white hover:bg-white/20'
       )}
     >
       <svg

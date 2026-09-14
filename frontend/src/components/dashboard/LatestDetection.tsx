@@ -18,6 +18,7 @@ export function LatestDetection({ clusters, onSelectCluster }: LatestDetectionPr
     <DetectionCard
       title="Latest detection"
       icon={SignalIcon}
+      actionLabel="View Latest Detection"
       cluster={latest}
       emptyMessage="No thermal detections available."
       onSelectCluster={onSelectCluster}

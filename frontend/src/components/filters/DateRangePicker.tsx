@@ -63,8 +63,10 @@ export function DateRangePicker({ value, active, triggerLabel, onChange }: DateR
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'rounded-lg border px-2.5 py-1 font-mono text-2xs uppercase tracking-wider transition-colors',
-          active ? 'border-ink-300 text-ink-100' : 'border-base-600 text-ink-500 hover:text-ink-300'
+          'rounded-md border px-2.5 py-1 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.06em] transition-colors',
+          active
+            ? 'border-[#C9C1A7] bg-accent text-white'
+            : 'border-[#C9C1A7]/40 text-[#E8E1C9]/70 hover:border-[#C9C1A7] hover:text-[#E8E1C9]'
         )}
       >
         {triggerLabel}

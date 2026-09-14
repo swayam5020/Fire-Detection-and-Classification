@@ -32,13 +32,13 @@ export function HistoryPage() {
   );
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto">
-      {status === 'success' && (
-        <AlertsSummaryBar alerts={alerts} severityFilter={severityFilter} onSeverityChange={setSeverityFilter} />
-      )}
+    <div className="flex h-full overflow-hidden bg-base-950">
+      <div className="flex min-w-0 flex-1 flex-col gap-2.5 overflow-y-auto px-3 py-2.5">
+        {status === 'success' && (
+          <AlertsSummaryBar alerts={alerts} severityFilter={severityFilter} onSeverityChange={setSeverityFilter} />
+        )}
 
-      <div className="flex h-[60vh] min-h-[400px] flex-shrink-0">
-        <div className="min-w-0 flex-1 overflow-y-auto">
+        <div className="flex-shrink-0 overflow-auto rounded-lg border border-base-700 bg-base-900">
           {status === 'loading' && <LoadingState label="Syncing historical records" />}
           {status === 'error' && <ErrorState message={error ?? 'Unable to reach the alerts API.'} onRetry={refetch} />}
           {status === 'success' && filteredAlerts.length === 0 && (
@@ -57,16 +57,12 @@ export function HistoryPage() {
           )}
         </div>
 
-        {status === 'success' && selectedAlert && (
-          <div className="w-[340px] flex-shrink-0">
-            <AlertDetailPanel alert={selectedAlert} />
-          </div>
-        )}
+        {status === 'success' && filteredAlerts.length > 0 && <AnomalyHistoryChart alerts={filteredAlerts} />}
       </div>
 
-      {status === 'success' && filteredAlerts.length > 0 && (
-        <div className="flex-shrink-0 border-t border-base-700 px-4 py-4">
-          <AnomalyHistoryChart alerts={filteredAlerts} />
+      {status === 'success' && selectedAlert && (
+        <div className="w-[330px] flex-shrink-0 border-l border-base-700">
+          <AlertDetailPanel alert={selectedAlert} />
         </div>
       )}
     </div>

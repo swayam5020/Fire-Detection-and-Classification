@@ -1,6 +1,7 @@
 import type { ThermalCluster } from '@/types/cluster';
 import { computeSituationLevel, SITUATION_LABELS, SITUATION_COLOR_CLASSES } from '@/lib/situation';
 import { WarningTriangleIcon } from './icons';
+import { SectionHeader } from '@/components/shared/SectionHeader';
 
 interface CurrentSituationBannerProps {
   activeClusters: ThermalCluster[];
@@ -12,22 +13,24 @@ export function CurrentSituationBanner({ activeClusters }: CurrentSituationBanne
   const criticalCount = activeClusters.filter((c) => c.risk_level === 'critical').length;
 
   return (
-    <div className={`flex h-full items-center gap-4 rounded-xl border ${colors.border} ${colors.bg} px-6 py-5`}>
-      <span
-        className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 bg-base-900 ${colors.border} ${colors.text}`}
-      >
-        <WarningTriangleIcon className="h-6 w-6" />
-      </span>
-      <div className="min-w-0">
-        <div className="font-mono text-2xs uppercase tracking-wider text-ink-500">Current situation</div>
-        <div className={`font-mono text-2xl font-bold uppercase tracking-wider ${colors.text}`}>
-          {SITUATION_LABELS[level]}
-        </div>
-        <div className="mt-0.5 text-xs text-ink-300">
-          {activeClusters.length} active anomal{activeClusters.length === 1 ? 'y' : 'ies'}
-        </div>
-        <div className="text-xs text-ink-400">
-          {criticalCount} critical event{criticalCount === 1 ? '' : 's'}
+    <div className="flex h-full flex-col gap-1.5">
+      <SectionHeader label="Current situation" />
+      <div className={`flex flex-1 items-center gap-3 rounded-xl border-2 px-4 py-3 ${colors.border} ${colors.bg}`}>
+        <span
+          className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg ${colors.iconBg} ${colors.iconText}`}
+        >
+          <WarningTriangleIcon className="h-6 w-6" />
+        </span>
+        <div className="min-w-0">
+          <div className={`font-mono text-[26px] font-bold uppercase leading-none tracking-[0.02em] ${colors.title}`}>
+            {SITUATION_LABELS[level]}
+          </div>
+          <div className={`mt-2 font-mono text-[13px] leading-snug ${colors.body}`}>
+            {activeClusters.length} active anomal{activeClusters.length === 1 ? 'y' : 'ies'}
+          </div>
+          <div className={`font-mono text-[13px] leading-snug ${colors.body}`}>
+            {criticalCount} critical event{criticalCount === 1 ? '' : 's'}
+          </div>
         </div>
       </div>
     </div>

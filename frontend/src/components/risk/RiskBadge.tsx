@@ -8,19 +8,30 @@ const RISK_STYLES: Record<RiskLevel, string> = {
   low: 'text-risk-low border-risk-low/40 bg-risk-low/10',
 };
 
+// Filled variant. Foreground is picked per hue for AA contrast against the
+// fill: white only on the dark critical red, primary ink on the lighter
+// orange/amber/green.
+const RISK_SOLID_STYLES: Record<RiskLevel, string> = {
+  critical: 'border-transparent bg-risk-critical text-white',
+  high: 'border-transparent bg-risk-high text-ink-100',
+  medium: 'border-transparent bg-risk-medium text-ink-100',
+  low: 'border-transparent bg-risk-low text-ink-100',
+};
+
 interface RiskBadgeProps {
   level: RiskLevel;
   size?: 'sm' | 'lg';
+  tone?: 'soft' | 'solid';
   className?: string;
 }
 
-export function RiskBadge({ level, size = 'sm', className }: RiskBadgeProps) {
+export function RiskBadge({ level, size = 'sm', tone = 'soft', className }: RiskBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-md border font-mono font-semibold uppercase tracking-wider',
+        'inline-flex items-center rounded-md border font-mono font-bold uppercase tracking-wider',
         size === 'lg' ? 'px-2.5 py-1 text-xs' : 'px-1.5 py-0.5 text-2xs',
-        RISK_STYLES[level],
+        tone === 'solid' ? RISK_SOLID_STYLES[level] : RISK_STYLES[level],
         className
       )}
     >
@@ -39,14 +50,14 @@ export const RISK_TEXT_CLASS: Record<RiskLevel, string> = {
 export function riskDotColor(level: RiskLevel): string {
   switch (level) {
     case 'critical':
-      return '#ef4444';
+      return '#E63946';
     case 'high':
-      return '#f97316';
+      return '#F97316';
     case 'medium':
-      return '#eab308';
+      return '#FFBF24';
     case 'low':
-      return '#22c55e';
+      return '#22C55E';
     default:
-      return '#888e96';
+      return '#446660';
   }
 }

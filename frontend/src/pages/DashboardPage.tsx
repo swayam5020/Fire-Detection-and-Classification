@@ -10,12 +10,10 @@ import { SosAlertCard } from '@/components/dashboard/SosAlertCard';
 import { ActiveCasesOverview } from '@/components/dashboard/ActiveCasesOverview';
 import { LatestDetection } from '@/components/dashboard/LatestDetection';
 import { HighestRiskDetection } from '@/components/dashboard/HighestRiskDetection';
-import { MapPreviewCard } from '@/components/dashboard/MapPreviewCard';
-import { OpenMapWidget } from '@/components/dashboard/OpenMapWidget';
-import { RiskDistributionSection } from '@/components/dashboard/RiskDistributionSection';
-import { SignalIcon, FlameIcon } from '@/components/dashboard/icons';
+import { RiskOverviewCard } from '@/components/dashboard/RiskOverviewCard';
+import { ClassificationDistributionCard } from '@/components/dashboard/ClassificationDistributionCard';
 import { SUPPORTED_DASHBOARD_CLASSIFICATIONS } from '@/lib/classification';
-import { getActiveClusterIds, selectHighestRiskCluster } from '@/lib/clusterSelection';
+import { getActiveClusterIds } from '@/lib/clusterSelection';
 import type { ClassificationType } from '@/types/cluster';
 
 // Operational command-center overview. Every number here is derived from
@@ -46,22 +44,13 @@ export function DashboardPage() {
     return byClass;
   }, [clusters, activeClusterIds]);
 
-  const latestCluster = useMemo(
-    () => [...clusters].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0] ?? null,
-    [clusters]
-  );
-  const highestRiskCluster = useMemo(
-    () => selectHighestRiskCluster(clusters, { activeClusterIds }),
-    [clusters, activeClusterIds]
-  );
-
   const goToCluster = (clusterId: string) => navigate(`/map?cluster=${clusterId}`);
 
   const isLoading = clusterStatus === 'loading' || alertStatus === 'loading';
   const hasError = clusterStatus === 'error';
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto bg-base-950 px-6 py-6">
+    <div className="flex h-full flex-col overflow-y-auto bg-base-950 px-4 py-4">
       {isLoading && (
         <div className="flex h-full items-center justify-center">
           <LoadingState label="Loading command center" />
@@ -75,50 +64,30 @@ export function DashboardPage() {
       )}
 
       {!isLoading && !hasError && (
-        <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-6">
-          {/* Row 1 — current situation, system clock, SOS alerts */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4">
+          {/* Row 1 — current situation, system status, SOS alerts */}
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <CurrentSituationBanner activeClusters={activeClusters} />
             <SystemClockCard />
             <SosAlertCard activeClusters={activeClusters} />
           </div>
 
-          {/* Row 2 — active case count + classification breakdown */}
+          {/* Row 2 — cases by classification */}
           <ActiveCasesOverview
-            activeCount={activeClusters.length}
             classificationCounts={classificationCounts}
             onSelectClassification={(cls) => navigate(`/map?classification=${cls}`)}
           />
 
-          {/* Row 3 — latest vs. highest-risk detection */}
-          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          {/* Row 3 — latest & highest-risk detection, each with an inline map preview */}
+          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             <LatestDetection clusters={clusters} onSelectCluster={goToCluster} />
             <HighestRiskDetection clusters={clusters} alerts={alerts} onSelectCluster={goToCluster} />
           </div>
 
-          {/* Row 4 — map preview for each of the above, and the full-map entry point */}
-          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <MapPreviewCard
-              title="Latest detection location"
-              icon={SignalIcon}
-              actionLabel="View Latest Detection"
-              cluster={latestCluster}
-            />
-            <MapPreviewCard
-              title="Highest risk location"
-              icon={FlameIcon}
-              actionLabel="View Highest-Risk Case"
-              cluster={highestRiskCluster}
-            />
-          </div>
-
-          {/* Row 5 — risk overview + circular risk distribution */}
-          <RiskDistributionSection activeClusters={activeClusters} />
-
-          <OpenMapWidget />
-
-          <div className="pb-2 pt-1 text-2xs text-ink-500">
-            All times in UTC &middot; Data updates in real-time &middot; Secure Connection Active
+          {/* Row 4 — risk overview donut + classification distribution */}
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <RiskOverviewCard activeClusters={activeClusters} />
+            <ClassificationDistributionCard activeClusters={activeClusters} />
           </div>
         </div>
       )}

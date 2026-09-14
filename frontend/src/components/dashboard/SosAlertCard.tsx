@@ -1,6 +1,7 @@
 import type { ThermalCluster } from '@/types/cluster';
 import { useNotificationCenter } from '@/hooks/useNotificationCenter';
 import { BellIcon } from './icons';
+import { SectionHeader } from '@/components/shared/SectionHeader';
 
 interface SosAlertCardProps {
   activeClusters: ThermalCluster[];
@@ -13,34 +14,30 @@ interface SosAlertCardProps {
 // reflects the same active-cluster count already computed on this page.
 export function SosAlertCard({ activeClusters }: SosAlertCardProps) {
   const { openSosModal } = useNotificationCenter();
-  const criticalCount = activeClusters.filter((c) => c.risk_level === 'critical').length;
 
   return (
-    <div className="flex h-full items-center gap-4 rounded-xl border border-thermal/30 bg-thermal/5 px-6 py-5">
-      <span className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 border-thermal/30 bg-base-900 text-thermal">
-        <BellIcon className="h-6 w-6" />
-        {activeClusters.length > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-base-900 bg-thermal px-0.5 font-mono text-[10px] font-bold leading-none text-white">
-            {activeClusters.length}
-          </span>
-        )}
-      </span>
-      <div className="min-w-0 flex-1">
-        <div className="font-mono text-xs font-bold uppercase tracking-wider text-thermal">SOS Alerts</div>
-        <div className="mt-0.5 text-xs text-ink-300">
-          {activeClusters.length} active anomal{activeClusters.length === 1 ? 'y' : 'ies'}
-        </div>
-        <div className="text-xs text-ink-400">
-          {criticalCount} critical event{criticalCount === 1 ? '' : 's'}
-        </div>
+    <div className="flex h-full flex-col gap-1.5">
+      <SectionHeader label="SOS alerts" />
+      <div className="flex flex-1 items-center gap-3 rounded-xl border border-base-700 bg-base-900 px-4 py-3">
+        <span
+          className="relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#FED7D7] text-[#EF4444]"
+          title={`${activeClusters.length} active anomalies`}
+        >
+          <BellIcon className="h-6 w-6" />
+          {activeClusters.length > 0 && (
+            <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-base-900 bg-thermal px-0.5 font-mono text-[10px] font-bold leading-none text-white">
+              {activeClusters.length}
+            </span>
+          )}
+        </span>
+        <button
+          type="button"
+          onClick={openSosModal}
+          className="flex h-11 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-accent px-4 font-mono text-[17px] font-bold text-white transition-colors hover:bg-accent-hover"
+        >
+          View Alerts &rarr;
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={openSosModal}
-        className="flex flex-shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-base-600 bg-base-900 px-3 py-1.5 font-mono text-2xs font-bold uppercase tracking-wider text-ink-200 transition-colors hover:border-thermal hover:text-thermal"
-      >
-        View Alerts &rarr;
-      </button>
     </div>
   );
 }

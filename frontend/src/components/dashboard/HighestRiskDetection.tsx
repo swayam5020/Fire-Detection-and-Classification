@@ -13,7 +13,9 @@ interface HighestRiskDetectionProps {
 
 // The highest-risk case among currently active anomalies — same selection
 // helper /map uses to resolve a classification click, so this never drifts
-// from what /map would land on for "highest risk, active".
+// from what /map would land on for "highest risk, active". Displayed under
+// the "Previous detection" title per product request; the underlying
+// selection is still risk-based, not chronological.
 export function HighestRiskDetection({ clusters, alerts, onSelectCluster }: HighestRiskDetectionProps) {
   const highestRisk = useMemo(() => {
     const activeClusterIds = getActiveClusterIds(alerts);
@@ -22,8 +24,9 @@ export function HighestRiskDetection({ clusters, alerts, onSelectCluster }: High
 
   return (
     <DetectionCard
-      title="Highest risk detection"
+      title="Previous detection"
       icon={FlameIcon}
+      actionLabel="View Detection"
       cluster={highestRisk}
       emptyMessage="No detections available."
       onSelectCluster={onSelectCluster}

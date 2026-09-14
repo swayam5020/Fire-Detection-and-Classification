@@ -52,11 +52,11 @@ export function dashboardClassificationLabel(classification: ClassificationType)
  * circles, DetectionCard's icon tile). Shared here so the two never drift.
  */
 const CLASSIFICATION_ACCENT_COLORS: Partial<Record<ClassificationType, string>> = {
-  industrial_fire: '#ef4444',
-  agricultural_burn: '#22c55e',
-  wildfire: '#3b82f6',
+  industrial_fire: '#E63946',
+  agricultural_burn: '#22C55E',
+  wildfire: '#1d4ed8',
 };
 
 export function classificationAccentColor(classification: ClassificationType): string {
-  return CLASSIFICATION_ACCENT_COLORS[classification] ?? '#888e96';
+  return CLASSIFICATION_ACCENT_COLORS[classification] ?? '#446660';
 }

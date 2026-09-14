@@ -19,13 +19,13 @@ export function FilterBar({ filters, onChange, clusters }: FilterBarProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 border-b border-base-700 bg-base-950 px-4 py-2">
+    <div className="flex flex-shrink-0 flex-wrap items-center gap-3">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">Type:</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-300">Type :</span>
         <select
           value={filters.classifications[0] ?? 'all'}
           onChange={(e) => setClassification(e.target.value)}
-          className="rounded-lg border border-base-600 bg-base-900 px-2 py-0.5 font-mono text-2xs uppercase tracking-wider text-ink-300 outline-none focus:border-ink-400"
+          className="min-w-[190px] rounded-md border border-base-700 bg-base-900 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.06em] text-accent-dark outline-none transition-colors focus:border-accent"
         >
           <option value="all">All Infrastructure</option>
           {Object.entries(CLASSIFICATION_LABELS).map(([value, label]) => (
@@ -36,7 +36,7 @@ export function FilterBar({ filters, onChange, clusters }: FilterBarProps) {
         </select>
       </div>
 
-      <span className="ml-auto font-mono text-2xs text-ink-500">{clusters.length} tracked anomalies</span>
+      <span className="ml-auto text-[11px] text-ink-400">{clusters.length} tracked anomalies</span>
     </div>
   );
 }

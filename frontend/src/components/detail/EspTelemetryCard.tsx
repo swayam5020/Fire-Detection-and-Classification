@@ -6,17 +6,17 @@ interface EspTelemetryCardProps {
   esp32: Esp32Telemetry | null;
 }
 
-// Ground-sensor telemetry, deliberately its own visually distinct card
-// (blue accent — never risk-red) rather than a plain info row, so it reads
-// immediately as "hardware reading" and isn't missed. Every field renders
-// "—" when no ESP32 unit is deployed at a cluster; values only ever come
-// from cluster.esp32, never invented here.
+// Ground-sensor telemetry: a labelled section over three inset metric
+// tiles, matching the reference's "Sensor Metric" spec (#E8E1C9 tile,
+// #0B3D3A value). Every field renders "—" when no ESP32 unit is deployed
+// at a cluster; values only ever come from cluster.esp32, never invented
+// here, so the tiles are simply ready for real backend readings.
 export function EspTelemetryCard({ esp32 }: EspTelemetryCardProps) {
   return (
-    <div className="rounded-xl border border-sky-800/40 bg-sky-500/10 px-4 py-3.5">
-      <div className="mb-3 flex items-center gap-1.5">
-        <SensorIcon className="h-4 w-4 text-sky-400" />
-        <span className="font-mono text-2xs font-bold uppercase tracking-wider text-sky-400">
+    <div>
+      <div className="mb-2 flex items-center gap-1.5">
+        <SensorIcon className="h-3.5 w-3.5 text-ink-400" />
+        <span className="font-mono text-[9px] font-bold uppercase tracking-[0.08em] text-ink-400">
           Ground sensor &middot; ESP32
         </span>
       </div>
@@ -31,9 +31,9 @@ export function EspTelemetryCard({ esp32 }: EspTelemetryCardProps) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-sky-800/30 bg-base-950 px-2 py-2 text-center">
-      <div className="font-mono text-[10px] uppercase tracking-wider text-sky-400/70">{label}</div>
-      <div className="mt-0.5 font-mono text-base font-bold text-ink-100">{value}</div>
+    <div className="rounded-md border border-base-700 bg-base-950 px-2 py-2 text-center">
+      <div className="font-mono text-[8px] uppercase leading-[1.3] tracking-[0.06em] text-ink-400">{label}</div>
+      <div className="mt-1 font-mono text-[17px] font-bold leading-none text-accent-dark">{value}</div>
     </div>
   );
 }
