@@ -14,6 +14,8 @@ interface DetectionCardProps {
   cluster: ThermalCluster | null;
   emptyMessage: string;
   onSelectCluster: (clusterId: string) => void;
+  /** Seeded preview artwork for this card's map area. */
+  previewSrc: string;
 }
 
 // Shared presentation for the two Row 3 detection summaries (latest and
@@ -22,7 +24,15 @@ interface DetectionCardProps {
 // seeded map preview (StaticMapPreview). The preview is artwork only; the
 // action below it still routes to the real interactive map with this
 // cluster selected.
-export function DetectionCard({ title, icon: Icon, actionLabel, cluster, emptyMessage, onSelectCluster }: DetectionCardProps) {
+export function DetectionCard({
+  title,
+  icon: Icon,
+  actionLabel,
+  cluster,
+  emptyMessage,
+  onSelectCluster,
+  previewSrc,
+}: DetectionCardProps) {
   return (
     <div className="flex h-full flex-col gap-1.5">
       <SectionHeader
@@ -69,7 +79,7 @@ export function DetectionCard({ title, icon: Icon, actionLabel, cluster, emptyMe
             </div>
 
             <div className="relative min-h-[168px] flex-1 overflow-hidden rounded-lg border border-base-700">
-              <StaticMapPreview cluster={cluster} />
+              <StaticMapPreview cluster={cluster} src={previewSrc} />
               <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-2">
                 <span className="min-w-0 truncate rounded-md bg-base-900/95 px-2 py-1 font-mono text-[10px] text-ink-200">
                   {cluster.region}

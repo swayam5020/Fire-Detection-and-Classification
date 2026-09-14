@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { ThermalCluster } from '@/types/cluster';
 import { DetectionCard } from './DetectionCard';
 import { SignalIcon } from './icons';
+import latestPreview from '@/assets/seeded-map-preview1.png';
 
 interface LatestDetectionProps {
   clusters: ThermalCluster[];
@@ -22,6 +23,7 @@ export function LatestDetection({ clusters, onSelectCluster }: LatestDetectionPr
       cluster={latest}
       emptyMessage="No thermal detections available."
       onSelectCluster={onSelectCluster}
+      previewSrc={latestPreview}
     />
   );
 }

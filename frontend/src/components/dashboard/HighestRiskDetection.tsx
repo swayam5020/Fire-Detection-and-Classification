@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { ThermalCluster } from '@/types/cluster';
 import { DetectionCard } from './DetectionCard';
 import { FlameIcon } from './icons';
+import previousPreview from '@/assets/seeded-map-preview2.png';
 import { getActiveClusterIds, selectHighestRiskCluster } from '@/lib/clusterSelection';
 import type { SosAlert } from '@/types/alert';
 
@@ -30,6 +31,7 @@ export function HighestRiskDetection({ clusters, alerts, onSelectCluster }: High
       cluster={highestRisk}
       emptyMessage="No detections available."
       onSelectCluster={onSelectCluster}
+      previewSrc={previousPreview}
     />
   );
 }
