@@ -33,7 +33,14 @@ from fire_engine import FireAnalysisEngine
 # ---------------------------------------------------------------------------
 
 ARTIFACTS_DIR = Path(__file__).resolve().parent
-load_dotenv(ARTIFACTS_DIR / ".env")
+# override=True: values in .env always win over any ambient environment
+# variable of the same name. Without this, a stray pre-existing env var
+# (even an empty one, e.g. left over from an earlier debugging attempt)
+# silently shadows the .env file's value with no error — which is exactly
+# what happened when DB_PASSWORD kept resolving to "" despite a correct
+# .env, because load_dotenv()'s default (override=False) skips a variable
+# that's already set.
+load_dotenv(ARTIFACTS_DIR / ".env", override=True)
 
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "5432")
