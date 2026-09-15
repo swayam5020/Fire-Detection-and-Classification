@@ -9,3 +9,8 @@ build/
 coverage/
 *.log
 *.tsbuildinfo
+
+# Python (ml_model/, backend/)
+.venv/
+__pycache__/
+*.pyc

@@ -8,7 +8,9 @@ export function StatStrip({ clusters }: StatStripProps) {
   const activeCount = clusters.length;
   const highRiskCount = clusters.filter((c) => c.risk_level === 'high' || c.risk_level === 'critical').length;
   const criticalCount = clusters.filter((c) => c.risk_level === 'critical').length;
-  const regionCount = new Set(clusters.map((c) => c.region)).size;
+  // Only clusters whose region the backend actually resolved are counted —
+  // otherwise every unnamed one would collapse into a single phantom region.
+  const regionCount = new Set(clusters.map((c) => c.region).filter((r): r is string => r != null)).size;
 
   return (
     <div className="grid flex-shrink-0 grid-cols-2 gap-px overflow-hidden rounded-lg border border-base-700 bg-base-700 sm:grid-cols-4">

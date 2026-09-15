@@ -1,5 +1,5 @@
 import type { SosAlert } from '@/types/alert';
-import { formatUtcDateTime, formatUtcTime, cn } from '@/lib/utils';
+import { formatUtcDateTime, formatUtcTime, cn, MISSING_VALUE } from '@/lib/utils';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 
 interface AlertDetailPanelProps {
@@ -13,7 +13,7 @@ const SEVERITY_TEXT: Record<SosAlert['severity'], string> = {
   low: 'text-risk-low',
 };
 
-const TEAM_STATUS_LABEL: Record<SosAlert['assigned_team_status'], string> = {
+const TEAM_STATUS_LABEL: Record<NonNullable<SosAlert['assigned_team_status']>, string> = {
   on_call: 'ON CALL',
   dispatched: 'DISPATCHED',
   standby: 'STANDBY',
@@ -48,35 +48,51 @@ export function AlertDetailPanel({ alert }: AlertDetailPanelProps) {
         </Section>
 
         <Section title="Protocol recommended actions">
-          <ol className="space-y-1.5">
-            {alert.recommended_actions.map((action, i) => (
-              <li key={action} className="flex gap-2 text-[12px] leading-relaxed text-ink-300">
-                <span className="flex-shrink-0 font-mono font-bold text-ink-400">{i + 1}.</span>
-                <span>{action}</span>
-              </li>
-            ))}
-          </ol>
+          {alert.recommended_actions && alert.recommended_actions.length > 0 ? (
+            <ol className="space-y-1.5">
+              {alert.recommended_actions.map((action, i) => (
+                <li key={action} className="flex gap-2 text-[12px] leading-relaxed text-ink-300">
+                  <span className="flex-shrink-0 font-mono font-bold text-ink-400">{i + 1}.</span>
+                  <span>{action}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="text-[11px] text-ink-400">No response protocol available for this incident.</p>
+          )}
         </Section>
 
         <Section title="Assigned dispatch team">
-          <div className="flex items-center justify-between gap-2 rounded-md border border-base-700 bg-base-900 px-3 py-2">
-            <span className="truncate font-mono text-[13px] font-bold text-ink-100">{alert.assigned_team}</span>
-            <span className="inline-flex flex-shrink-0 rounded bg-[#DCFCE7] px-2 py-1 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-[#166534]">
-              {TEAM_STATUS_LABEL[alert.assigned_team_status]}
-            </span>
-          </div>
+          {alert.assigned_team ? (
+            <div className="flex items-center justify-between gap-2 rounded-md border border-base-700 bg-base-900 px-3 py-2">
+              <span className="truncate font-mono text-[13px] font-bold text-ink-100">{alert.assigned_team}</span>
+              {alert.assigned_team_status && (
+                <span className="inline-flex flex-shrink-0 rounded bg-[#DCFCE7] px-2 py-1 font-mono text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-[#166534]">
+                  {TEAM_STATUS_LABEL[alert.assigned_team_status]}
+                </span>
+              )}
+            </div>
+          ) : (
+            <div className="rounded-md border border-base-700 bg-base-900 px-3 py-2 text-[11px] text-ink-400">
+              {MISSING_VALUE} No dispatch team assigned
+            </div>
+          )}
         </Section>
 
         <Section title="Log timeline">
-          <ul className="space-y-2.5 border-l border-base-700 pl-3.5">
-            {alert.log_timeline.map((entry) => (
-              <li key={entry.timestamp + entry.message} className="relative">
-                <span className="absolute -left-[17px] top-1 block h-2 w-2 rounded-full bg-[#38BDF8]" />
-                <div className="font-mono text-[10px] text-ink-400">{formatUtcDateTime(entry.timestamp)}</div>
-                <div className="mt-0.5 text-[12px] leading-snug text-ink-200">{entry.message}</div>
-              </li>
-            ))}
-          </ul>
+          {alert.log_timeline.length > 0 ? (
+            <ul className="space-y-2.5 border-l border-base-700 pl-3.5">
+              {alert.log_timeline.map((entry) => (
+                <li key={entry.timestamp + entry.message} className="relative">
+                  <span className="absolute -left-[17px] top-1 block h-2 w-2 rounded-full bg-[#38BDF8]" />
+                  <div className="font-mono text-[10px] text-ink-400">{formatUtcDateTime(entry.timestamp)}</div>
+                  <div className="mt-0.5 text-[12px] leading-snug text-ink-200">{entry.message}</div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-[11px] text-ink-400">No activity recorded yet.</p>
+          )}
         </Section>
       </div>
     </aside>

@@ -88,6 +88,40 @@ class FireAnalysisEngine:
             "risk_reasons": reasons
         }
 
+    def analyze_batch(self, raw_fire_dicts):
+        """
+        Vectorized form of analyze() for many events at once: one scaler
+        transform and one model forward pass instead of N of each. Used by
+        the API's per-request endpoints, which otherwise re-run the ANN once
+        per cluster row on every request.
+        """
+        if not raw_fire_dicts:
+            return []
+
+        input_df = pd.DataFrame(raw_fire_dicts)[self.expected_features]
+        input_scaled = self.scaler.transform(input_df)
+        probs = self.model.predict(input_scaled, verbose=0)
+
+        predicted_idx = np.argmax(probs, axis=1)
+        predicted_types = self.label_encoder.inverse_transform(predicted_idx)
+        confidences = np.max(probs, axis=1) * 100
+
+        results = []
+        for i, raw in enumerate(raw_fire_dicts):
+            risk_output = self._evaluate_risk(raw)
+            class_prob_map = {
+                cls_name: round(float(probs[i][j]), 4) for j, cls_name in enumerate(self.label_encoder.classes_)
+            }
+            results.append({
+                "fire_type": predicted_types[i],
+                "probability": round(float(confidences[i]), 2),
+                "all_class_probabilities": class_prob_map,
+                "risk_score": risk_output["risk_score"],
+                "risk_level": risk_output["risk_level"],
+                "risk_reason": risk_output["risk_reasons"],
+            })
+        return results
+
     def analyze(self, raw_fire_dict):
         """Generates: fire type, probability, risk score, risk level, and risk reasons."""
         # 1. Deterministic Risk Evaluation (Uses raw physical metrics)

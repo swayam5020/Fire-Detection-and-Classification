@@ -9,7 +9,7 @@ import { RiskHighlightCard } from '@/components/risk/RiskHighlightCard';
 import { PersistenceHighlightCard } from '@/components/risk/PersistenceHighlightCard';
 import { Section, Row } from '@/components/shared/InfoBlock';
 import { selectLatestAlert } from '@/lib/clusterSelection';
-import { coordString, formatUtcTime, cn } from '@/lib/utils';
+import { coordString, formatBrightness, formatFrp, formatUtcTime, cn, MISSING_VALUE } from '@/lib/utils';
 
 const SEVERITY_TEXT: Record<string, string> = {
   critical: 'text-risk-critical',
@@ -84,8 +84,8 @@ export function AlertsPage() {
           <PersistenceHighlightCard persistenceScore={cluster.persistence_score} durationHours={cluster.duration_hours} />
 
           <div className="grid grid-cols-2 gap-3">
-            <Metric label="FRP" value={`${cluster.frp.toFixed(1)} MW`} />
-            <Metric label="Brightness" value={`${cluster.brightness.toFixed(1)} K`} />
+            <Metric label="FRP" value={formatFrp(cluster.frp)} />
+            <Metric label="Brightness" value={formatBrightness(cluster.brightness)} />
           </div>
 
           <Section title="AI classification">
@@ -94,14 +94,14 @@ export function AlertsPage() {
 
           <Section title="Geographic location">
             <Row label="Coordinates" value={coordString(cluster.centroid.lat, cluster.centroid.lon)} />
-            <Row label="Region" value={cluster.region} />
+            <Row label="Region" value={cluster.region ?? MISSING_VALUE} />
           </Section>
 
           <Section title="Adjacent infrastructure">
             {cluster.facility ? (
               <>
-                <div className="mb-1 text-xs font-semibold text-ink-100">{cluster.facility.name}</div>
-                <Row label="Facility type" value={cluster.facility.facility_type} />
+                <div className="mb-1 text-xs font-semibold text-ink-100">{cluster.facility.name ?? MISSING_VALUE}</div>
+                <Row label="Facility type" value={cluster.facility.facility_type ?? MISSING_VALUE} />
                 <Row label="Est. proximity" value={`${cluster.facility.distance_km.toFixed(1)}km radial`} emphasize />
               </>
             ) : (

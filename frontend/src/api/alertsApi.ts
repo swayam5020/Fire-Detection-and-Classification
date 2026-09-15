@@ -1,8 +1,16 @@
 import type { SosAlert, NotificationState } from '@/types/alert';
 import { mockAlerts } from '@/mock/alerts';
+import { toSosAlerts, type BackendAlert } from './alertsAdapters';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api/v1';
-const USE_MOCK = true; // flip to false once FastAPI backend is reachable
+/**
+ * Live backend: GET /api/alerts and /api/alerts/notifications on
+ * ml_model/main.py. Both are derived from real cluster risk data — there is
+ * no separate alerts table. Fields with no real source (dispatch team,
+ * recommended actions, event history) come back null/empty and render as
+ * "—" / hidden; see the comment on SosAlert in src/types/alert.ts.
+ */
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
 
 const NETWORK_DELAY_MS = 450;
 
@@ -15,11 +23,12 @@ export async function fetchAlerts(): Promise<SosAlert[]> {
     return delay(mockAlerts);
   }
 
-  const res = await fetch(`${API_BASE}/alerts`);
+  const res = await fetch(`${API_BASE}/api/alerts`);
   if (!res.ok) {
     throw new Error(`Failed to fetch alerts: ${res.status}`);
   }
-  return res.json();
+  const body = (await res.json()) as BackendAlert[];
+  return toSosAlerts(body);
 }
 
 export async function fetchNotificationState(): Promise<NotificationState> {
@@ -28,7 +37,7 @@ export async function fetchNotificationState(): Promise<NotificationState> {
     return delay({ hasUnread: activeCritical > 0, unreadCount: activeCritical });
   }
 
-  const res = await fetch(`${API_BASE}/alerts/notifications`);
+  const res = await fetch(`${API_BASE}/api/alerts/notifications`);
   if (!res.ok) {
     throw new Error(`Failed to fetch notification state: ${res.status}`);
   }

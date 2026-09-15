@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import type { SosAlert } from '@/types/alert';
 import { fetchAlerts } from '@/api/alertsApi';
+import { compareTimestampsDesc } from '@/lib/utils';
 import type { AsyncStatus } from './useClusters';
 
 const POLL_MS = 20000;
@@ -48,8 +49,10 @@ export function useAlertArrivals(): UseAlertArrivalsResult {
           const unseen = data.filter((a) => !seenIds.current!.has(a.alert_id));
           if (unseen.length > 0) {
             unseen.forEach((a) => seenIds.current!.add(a.alert_id));
+            // compareTimestampsDesc(a, latest) < 0 means a is more recent than latest
+            // (undated arrivals never win over a dated one, but do beat nothing).
             const newest = unseen.reduce((latest, a) =>
-              new Date(a.timestamp).getTime() > new Date(latest.timestamp).getTime() ? a : latest
+              compareTimestampsDesc(a.timestamp, latest.timestamp) < 0 ? a : latest
             );
             setLatestArrival(newest);
           }

@@ -100,9 +100,14 @@ export function AnomalyHistoryChart({ alerts }: AnomalyHistoryChartProps) {
   const [range, setRange] = useState<TimeRangePreset>('24h');
 
   const scopedAlerts = useMemo(() => {
-    if (range === 'all') return alerts;
+    // An alert with no timestamp can't be placed on a time axis at all —
+    // unlike a list filter, there is no "keep it anyway" option for a
+    // chart position, so undated alerts are dropped here specifically
+    // (contrast MapPage's cluster time filter, which keeps them).
+    const dated = alerts.filter((a): a is SosAlert & { timestamp: string } => a.timestamp != null);
+    if (range === 'all') return dated;
     const { startMs, endMs } = presetRangeBounds(range);
-    return alerts.filter((a) => {
+    return dated.filter((a) => {
       const t = new Date(a.timestamp).getTime();
       return t >= startMs && t <= endMs;
     });

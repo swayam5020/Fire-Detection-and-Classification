@@ -1,6 +1,7 @@
 import type { ThermalCluster, RiskLevel } from '@/types/cluster';
 import { RiskBadge } from './RiskBadge';
 import { RiskBar } from './RiskBar';
+import { formatScore } from '@/lib/utils';
 
 interface RiskHighlightCardProps {
   cluster: ThermalCluster;
@@ -22,7 +23,7 @@ export function RiskHighlightCard({ cluster }: RiskHighlightCardProps) {
 
       <div className="mb-2.5 flex items-end justify-between gap-3">
         <span className="font-mono text-[38px] font-bold leading-none text-ink-100">
-          {cluster.risk_score}
+          {formatScore(cluster.risk_score)}
           <span className="font-mono text-[13px] font-normal text-ink-400"> / 100</span>
         </span>
         <RiskBadge level={cluster.risk_level} size="lg" tone="solid" />

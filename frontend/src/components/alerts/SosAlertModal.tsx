@@ -9,6 +9,7 @@ import { ErrorState } from '@/components/states/ErrorState';
 import { EmptyState } from '@/components/states/EmptyState';
 import type { SosAlert } from '@/types/alert';
 import type { ThermalCluster } from '@/types/cluster';
+import { compareTimestampsDesc } from '@/lib/utils';
 
 // The emergency incident queue: every SOS alert, newest first, each card
 // showing just enough to triage (risk, persistence, severity, cluster,
@@ -33,7 +34,7 @@ export function SosAlertModal() {
   // Newest arrival first — the raw fetch order isn't guaranteed to match
   // timestamp order, so this is sorted explicitly rather than trusted as-is.
   const sortedAlerts = useMemo(
-    () => [...alerts].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
+    () => [...alerts].sort((a, b) => compareTimestampsDesc(a.timestamp, b.timestamp)),
     [alerts]
   );
 

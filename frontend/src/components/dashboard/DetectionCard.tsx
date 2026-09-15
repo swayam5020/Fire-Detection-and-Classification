@@ -3,7 +3,15 @@ import type { ThermalCluster } from '@/types/cluster';
 import { RiskBadge, RISK_TEXT_CLASS } from '@/components/risk/RiskBadge';
 import { dashboardClassificationLabel, classificationAccentColor } from '@/lib/classification';
 import { classificationIcon } from './icons';
-import { coordString, formatRelativeShort, formatTemperature, formatHumidity, formatSmokeLevel } from '@/lib/utils';
+import {
+  coordString,
+  formatRelativeShort,
+  formatScore,
+  formatTemperature,
+  formatHumidity,
+  formatSmokeLevel,
+  MISSING_VALUE,
+} from '@/lib/utils';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { StaticMapPreview } from './StaticMapPreview';
 
@@ -60,7 +68,9 @@ export function DetectionCard({
                   <div className="mt-1.5 truncate text-[13px] font-semibold leading-tight text-ink-100">
                     {dashboardClassificationLabel(cluster.classification)}
                   </div>
-                  <div className="truncate font-mono text-[11px] leading-tight text-ink-400">{cluster.region}</div>
+                  <div className="truncate font-mono text-[11px] leading-tight text-ink-400">
+                    {cluster.region ?? MISSING_VALUE}
+                  </div>
                   <div className="mt-0.5 truncate font-mono text-[10px] leading-tight text-ink-500">
                     {coordString(cluster.centroid.lat, cluster.centroid.lon)}
                   </div>
@@ -68,7 +78,7 @@ export function DetectionCard({
               </button>
 
               <div className="grid grid-cols-2 gap-2">
-                <Metric label="Risk Score" value={cluster.risk_score} suffix="/100" valueClass={RISK_TEXT_CLASS[cluster.risk_level]} />
+                <Metric label="Risk Score" value={formatScore(cluster.risk_score)} suffix="/100" valueClass={RISK_TEXT_CLASS[cluster.risk_level]} />
                 <Metric label="Persistence" value={cluster.persistence_score} suffix="/100" />
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -82,7 +92,7 @@ export function DetectionCard({
               <StaticMapPreview cluster={cluster} src={previewSrc} />
               <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-2">
                 <span className="min-w-0 truncate rounded-md bg-base-900/95 px-2 py-1 font-mono text-[10px] text-ink-200">
-                  {cluster.region}
+                  {cluster.region ?? MISSING_VALUE}
                 </span>
                 <button
                   type="button"

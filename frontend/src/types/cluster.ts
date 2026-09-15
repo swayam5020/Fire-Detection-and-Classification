@@ -22,9 +22,15 @@ export interface ClusterCentroid {
   lon: number;
 }
 
+/**
+ * The pipeline's geospatial join knows how far the nearest industrial facility
+ * is — that distance is what drives the risk engine — but does not always
+ * resolve which facility it is. Name and type are therefore nullable while
+ * distance, the field the risk score actually depends on, is not.
+ */
 export interface AdjacentFacility {
-  name: string;
-  facility_type: string;
+  name: string | null;
+  facility_type: string | null;
   distance_km: number;
 }
 
@@ -40,27 +46,36 @@ export interface Esp32Telemetry {
   smoke_level: 'low' | 'medium' | 'high' | null;
 }
 
+/**
+ * Fields are nullable where the live backend may not supply them. The API
+ * currently returns a subset of this shape (see `src/api/adapters.ts`), and
+ * the rule throughout the UI is the same one the ESP32 tiles already follow:
+ * a value the backend did not send renders as "—", never as a placeholder,
+ * a zero, or an invented figure.
+ *
+ * A field is non-nullable only where the backend is guaranteed to provide it:
+ * identity, position, risk band, classification, and persistence.
+ */
 export interface ThermalCluster {
   cluster_id: string;
   centroid: ClusterCentroid;
-  region: string;
+  region: string | null;
 
-  risk_score: number; // 0-100, backend-computed
+  risk_score: number | null; // 0-100, backend-computed
   risk_level: RiskLevel;
-  risk_reasons: string[];
-
+  risk_reasons: string[]; // empty when the backend sends no reasoning
   classification: ClassificationType;
   classification_label: string;
   classification_probability: number; // 0-1
 
-  frp: number; // Fire Radiative Power, MW
-  brightness: number; // Kelvin, FIRMS channel 21/31
-  confidence: number; // FIRMS detection confidence, 0-100
+  frp: number | null; // Fire Radiative Power, MW
+  brightness: number | null; // Kelvin, FIRMS channel 21/31
+  confidence: number | null; // FIRMS detection confidence, 0-100
 
-  timestamp: string; // ISO 8601, most recent detection
-  first_detected: string; // ISO 8601
-  last_detected: string; // ISO 8601
-  duration_hours: number;
+  timestamp: string | null; // ISO 8601, most recent detection
+  first_detected: string | null; // ISO 8601
+  last_detected: string | null; // ISO 8601
+  duration_hours: number | null;
   persistence_score: number; // 0-100
 
   facility: AdjacentFacility | null;

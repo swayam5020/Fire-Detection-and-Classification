@@ -1,5 +1,6 @@
 import type { ThermalCluster } from '@/types/cluster';
 import { RiskBadge } from '@/components/risk/RiskBadge';
+import { formatScore } from '@/lib/utils';
 
 interface HoverCardProps {
   cluster: ThermalCluster;
@@ -16,7 +17,7 @@ export function HoverCard({ cluster }: HoverCardProps) {
         <div className="mb-1.5 flex items-baseline justify-between">
           <span className="font-mono text-2xs uppercase tracking-wider text-ink-500">Risk score</span>
           <span className="font-mono text-sm font-bold text-ink-100">
-            {cluster.risk_score}
+            {formatScore(cluster.risk_score)}
             <span className="text-2xs font-normal text-ink-500">/100</span>
           </span>
         </div>

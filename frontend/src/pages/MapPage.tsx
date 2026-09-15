@@ -42,6 +42,12 @@ export function MapPage() {
       const classMatch = filters.classifications.length === 0 || filters.classifications.includes(c.classification);
 
       const timeMatch = (() => {
+        // An undated cluster can't be proved inside or outside the window.
+        // It is kept rather than hidden: dropping a real detection because
+        // the backend omitted its timestamp would silently lose a fire,
+        // which is far worse than showing one the time filter can't place.
+        if (c.timestamp == null) return true;
+
         if (filters.timeRange === 'custom') {
           // No range chosen yet in the picker — don't filter until one is applied.
           if (!filters.customRange) return true;

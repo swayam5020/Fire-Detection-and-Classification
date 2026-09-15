@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClusters } from '@/hooks/useClusters';
 import { useAlerts } from '@/hooks/useAlerts';
-import { getActiveClusterIds } from '@/lib/clusterSelection';
+import { compareByRiskScoreDesc, getActiveClusterIds } from '@/lib/clusterSelection';
 import { CLASSIFICATION_LABELS } from '@/lib/classification';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ActiveCaseCard } from '@/components/active/ActiveCaseCard';
@@ -50,9 +50,7 @@ export function ActiveCasesPage() {
     const activeIds = getActiveClusterIds(alerts);
     return clusters
       .filter((c) => activeIds.has(c.cluster_id))
-      .sort(
-        (a, b) => RISK_ORDER[a.risk_level] - RISK_ORDER[b.risk_level] || b.risk_score - a.risk_score
-      );
+      .sort((a, b) => RISK_ORDER[a.risk_level] - RISK_ORDER[b.risk_level] || compareByRiskScoreDesc(a, b));
   }, [clusters, alerts]);
 
   const countsByLevel = useMemo(() => {
@@ -72,7 +70,9 @@ export function ActiveCasesPage() {
     return activeCases.filter((c) => {
       if (riskFilter !== 'all' && c.risk_level !== riskFilter) return false;
       if (classFilter !== 'all' && c.classification !== classFilter) return false;
-      if (query && !`${c.cluster_id} ${c.region}`.toLowerCase().includes(query)) return false;
+      // `?? ''` rather than interpolating a null, which would make every
+      // region-less case match a search for "null".
+      if (query && !`${c.cluster_id} ${c.region ?? ''}`.toLowerCase().includes(query)) return false;
       return true;
     });
   }, [activeCases, riskFilter, classFilter, search]);

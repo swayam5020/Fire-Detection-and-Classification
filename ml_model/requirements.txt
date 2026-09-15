@@ -1,10 +1,14 @@
-fastapi
-uvicorn
-psycopg2-binary
-SQLAlchemy
-pandas
-numpy
-scikit-learn
-joblib
-tensorflow
-requests
+# Requires Python 3.11 or 3.12 — TensorFlow has no published wheel for 3.14
+# (or 3.13 at pin time) yet. Create the venv with that interpreter, e.g.:
+#   py -3.12 -m venv .venv
+fastapi>=0.115,<1
+uvicorn[standard]>=0.32,<1
+python-dotenv>=1.0,<2
+psycopg2-binary>=2.9,<3
+SQLAlchemy>=2.0,<3
+pandas>=2.2,<3
+numpy>=1.26,<2.2
+scikit-learn>=1.6,<1.7  # pickled artifacts were saved with 1.6.1; keep in this range
+joblib>=1.4,<2
+tensorflow>=2.16,<2.18
+requests>=2.32,<3

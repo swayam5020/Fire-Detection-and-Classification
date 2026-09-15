@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { ThermalCluster } from '@/types/cluster';
 import { DetectionCard } from './DetectionCard';
 import { SignalIcon } from './icons';
+import { compareByTimestampDesc } from '@/lib/clusterSelection';
 import latestPreview from '@/assets/seeded-map-preview1.png';
 
 interface LatestDetectionProps {
@@ -10,10 +11,7 @@ interface LatestDetectionProps {
 }
 
 export function LatestDetection({ clusters, onSelectCluster }: LatestDetectionProps) {
-  const latest = useMemo(
-    () => [...clusters].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0] ?? null,
-    [clusters]
-  );
+  const latest = useMemo(() => [...clusters].sort(compareByTimestampDesc)[0] ?? null, [clusters]);
 
   return (
     <DetectionCard

@@ -4,7 +4,7 @@ import { PersistenceHighlightCard } from '@/components/risk/PersistenceHighlight
 import { EspTelemetryCard } from './EspTelemetryCard';
 import { Section, Row } from '@/components/shared/InfoBlock';
 import { SectionHeader } from '@/components/shared/SectionHeader';
-import { coordString, formatUtcDateTime } from '@/lib/utils';
+import { coordString, formatBrightness, formatFrp, formatPercent, formatUtcDateTime, MISSING_VALUE } from '@/lib/utils';
 import { classificationIcon } from '@/components/dashboard/icons';
 import { classificationAccentColor } from '@/lib/classification';
 import { MapPinIcon, BarChartIcon, StackIcon } from '@/components/dashboard/icons';
@@ -54,21 +54,23 @@ export function DetailPanel({ cluster, onClose }: DetailPanelProps) {
 
         <Section title="Geographic location" icon={MapPinIcon}>
           <Row label="Coordinates" value={coordString(cluster.centroid.lat, cluster.centroid.lon)} />
-          <Row label="Region" value={cluster.region} />
+          <Row label="Region" value={cluster.region ?? MISSING_VALUE} />
         </Section>
 
         <Section title="Technical telemetry" icon={BarChartIcon}>
-          <Row label="Fire Radiative Power (FRP)" value={`${cluster.frp.toFixed(1)} MW`} />
-          <Row label="Brightness temp (Ch. 21)" value={`${cluster.brightness.toFixed(1)} K`} />
-          <Row label="FIRMS sensor confidence" value={`${cluster.confidence}%`} />
+          <Row label="Fire Radiative Power (FRP)" value={formatFrp(cluster.frp)} />
+          <Row label="Brightness temp (Ch. 21)" value={formatBrightness(cluster.brightness)} />
+          <Row label="FIRMS sensor confidence" value={formatPercent(cluster.confidence)} />
           <Row label="Timestamp" value={formatUtcDateTime(cluster.timestamp)} />
         </Section>
 
         <Section title="Adjacent infrastructure" icon={StackIcon}>
           {cluster.facility ? (
             <>
-              <div className="mb-0.5 text-[13px] font-semibold text-ink-100">{cluster.facility.name}</div>
-              <Row label="Facility type" value={cluster.facility.facility_type} />
+              <div className="mb-0.5 text-[13px] font-semibold text-ink-100">
+                {cluster.facility.name ?? MISSING_VALUE}
+              </div>
+              <Row label="Facility type" value={cluster.facility.facility_type ?? MISSING_VALUE} />
               <Row label="Est. proximity" value={`${cluster.facility.distance_km.toFixed(1)}km radial`} emphasize />
             </>
           ) : (

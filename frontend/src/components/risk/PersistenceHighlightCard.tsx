@@ -2,7 +2,7 @@ import { formatDuration } from '@/lib/utils';
 
 interface PersistenceHighlightCardProps {
   persistenceScore: number;
-  durationHours: number;
+  durationHours: number | null;
 }
 
 export function PersistenceHighlightCard({ persistenceScore, durationHours }: PersistenceHighlightCardProps) {

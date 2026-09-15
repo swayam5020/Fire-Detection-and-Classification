@@ -5,7 +5,15 @@ import { SectionHeader } from '@/components/shared/SectionHeader';
 import { EspTelemetryCard } from '@/components/detail/EspTelemetryCard';
 import { classificationAccentColor } from '@/lib/classification';
 import { classificationIcon, MapPinIcon, StackIcon } from '@/components/dashboard/icons';
-import { coordString, formatDuration, formatRelativeShort, formatUtcDateTime } from '@/lib/utils';
+import {
+  coordString,
+  formatDuration,
+  formatPercent,
+  formatRelativeShort,
+  formatScore,
+  formatUtcDateTime,
+  MISSING_VALUE,
+} from '@/lib/utils';
 
 interface ActiveCaseCardProps {
   cluster: ThermalCluster;
@@ -38,7 +46,7 @@ export function ActiveCaseCard({ cluster, onViewOnMap }: ActiveCaseCardProps) {
           <div className="mb-1 font-mono text-[9px] uppercase leading-none tracking-[0.08em] text-ink-400">Risk</div>
           <div className="mb-2 flex items-end justify-between gap-3">
             <span className={`font-mono text-[34px] font-bold leading-none ${RISK_TEXT_CLASS[cluster.risk_level]}`}>
-              {cluster.risk_score}
+              {formatScore(cluster.risk_score)}
               <span className="font-mono text-[13px] font-normal text-ink-400"> / 100</span>
             </span>
             <RiskBadge level={cluster.risk_level} size="lg" tone="solid" />
@@ -71,7 +79,9 @@ export function ActiveCaseCard({ cluster, onViewOnMap }: ActiveCaseCardProps) {
           </span>
           <div className="min-w-0">
             <div className="font-mono text-[9px] uppercase leading-none tracking-[0.08em] text-ink-400">Location</div>
-            <div className="mt-1 truncate text-[13px] font-semibold leading-tight text-ink-100">{cluster.region}</div>
+            <div className="mt-1 truncate text-[13px] font-semibold leading-tight text-ink-100">
+              {cluster.region ?? MISSING_VALUE}
+            </div>
             <div className="mt-0.5 truncate font-mono text-[10px] leading-tight text-ink-400">
               {coordString(cluster.centroid.lat, cluster.centroid.lon)}
             </div>
@@ -82,14 +92,14 @@ export function ActiveCaseCard({ cluster, onViewOnMap }: ActiveCaseCardProps) {
         <div className="grid grid-cols-2 gap-2">
           <Metric label="Persistence" value={`${cluster.persistence_score}`} suffix="/100" />
           <Metric label="Duration" value={formatDuration(cluster.duration_hours).replace(' continuous', '')} />
-          <Metric label="FRP" value={cluster.frp.toFixed(1)} suffix="MW" />
-          <Metric label="Brightness" value={cluster.brightness.toFixed(1)} suffix="K" />
+          <Metric label="FRP" value={cluster.frp?.toFixed(1) ?? MISSING_VALUE} suffix="MW" />
+          <Metric label="Brightness" value={cluster.brightness?.toFixed(1) ?? MISSING_VALUE} suffix="K" />
         </div>
 
         <div className="rounded-md border border-base-800 bg-base-850 px-2.5 py-2">
           <Row label="First detected" value={formatUtcDateTime(cluster.first_detected)} />
           <Row label="Last detected" value={formatUtcDateTime(cluster.last_detected)} />
-          <Row label="FIRMS confidence" value={`${cluster.confidence}%`} />
+          <Row label="FIRMS confidence" value={formatPercent(cluster.confidence)} />
         </div>
 
         {/* Ground-sensor readings, kept distinct from the satellite-derived
@@ -106,9 +116,9 @@ export function ActiveCaseCard({ cluster, onViewOnMap }: ActiveCaseCardProps) {
                 Adjacent infrastructure
               </div>
               <div className="mt-1 truncate text-[13px] font-semibold leading-tight text-ink-100">
-                {cluster.facility.name}
+                {cluster.facility.name ?? MISSING_VALUE}
               </div>
-              <Row label="Facility type" value={cluster.facility.facility_type} />
+              <Row label="Facility type" value={cluster.facility.facility_type ?? MISSING_VALUE} />
               <Row label="Est. proximity" value={`${cluster.facility.distance_km.toFixed(1)}km radial`} emphasize />
             </div>
           </div>
@@ -132,7 +142,10 @@ function Metric({ label, value, suffix }: { label: string; value: string; suffix
       <div className="truncate font-mono text-[9px] uppercase leading-none text-ink-400">{label}</div>
       <div className="mt-1.5 flex items-baseline gap-1">
         <span className="font-mono text-[17px] font-bold leading-none text-ink-100">{value}</span>
-        {suffix && <span className="font-mono text-[10px] leading-none text-ink-400">{suffix}</span>}
+        {/* A unit beside an em dash reads as a measurement; hide it when absent. */}
+        {suffix && value !== MISSING_VALUE && (
+          <span className="font-mono text-[10px] leading-none text-ink-400">{suffix}</span>
+        )}
       </div>
     </div>
   );
