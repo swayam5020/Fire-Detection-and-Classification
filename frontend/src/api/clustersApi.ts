@@ -1,4 +1,4 @@
-import type { ThermalCluster } from '@/types/cluster';
+import type { ThermalCluster, Esp32Telemetry } from '@/types/cluster';
 import { mockClusters } from '@/mock/clusters';
 import { toThermalClusters, type ThermalMapResponse, type BackendErrorResponse } from './adapters';
 
@@ -59,11 +59,7 @@ type Esp32FirebaseData = {
  * Temperature and humidity come directly from the Wokwi ESP32.
  * Smoke is kept as a fixed mid-level value for now.
  */
-async function fetchEspTelemetry(): Promise<{
-  temperature: number | null;
-  humidity: number | null;
-  smoke_level: number;
-}> {
+async function fetchEspTelemetry(): Promise<Esp32Telemetry> {
   try {
     const res = await fetch(ESP32_FIREBASE_URL);
 
@@ -80,19 +76,19 @@ async function fetchEspTelemetry(): Promise<{
       data?.humidity != null ? Number(data.humidity) : null;
 
     return {
-      temperature: Number.isFinite(temperature) ? temperature : null,
-      humidity: Number.isFinite(humidity) ? humidity : null,
+      temperature_c: Number.isFinite(temperature) ? temperature : null,
+      humidity_pct: Number.isFinite(humidity) ? humidity : null,
 
       // Fixed mid-level smoke value until the ESP32 smoke sensor is integrated.
-      smoke_level: 50,
+      smoke_level: 'medium',
     };
   } catch (error) {
     console.error('Failed to fetch ESP32 telemetry:', error);
 
     return {
-      temperature: null,
-      humidity: null,
-      smoke_level: 50,
+      temperature_c: null,
+      humidity_pct: null,
+      smoke_level: 'medium',
     };
   }
 }

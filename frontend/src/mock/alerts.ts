@@ -1,4 +1,4 @@
-Simport type { SosAlert } from '@/types/alert';
+import type { SosAlert } from '@/types/alert';
 
 const now = Date.now();
 const hoursAgo = (h: number) => new Date(now - h * 3600 * 1000).toISOString();
