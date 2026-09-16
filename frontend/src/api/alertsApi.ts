@@ -1,4 +1,5 @@
 import type { SosAlert, NotificationState } from '@/types/alert';
+import type { ThermalCluster } from '@/types/cluster';
 import { mockAlerts } from '@/mock/alerts';
 import { toSosAlerts, type BackendAlert } from './alertsAdapters';
 
@@ -18,7 +19,13 @@ function delay<T>(value: T, ms = NETWORK_DELAY_MS): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
-export async function fetchAlerts(): Promise<SosAlert[]> {
+/**
+ * `clusters` is needed to resolve each alert's cluster_id to the same
+ * deduped id ThermalCluster uses — see the comment on toSosAlert. Pass
+ * whatever the caller's current clusters list is; an empty/stale list just
+ * means alerts won't cross-reference as active until a fresher one arrives.
+ */
+export async function fetchAlerts(clusters: ThermalCluster[]): Promise<SosAlert[]> {
   if (USE_MOCK) {
     return delay(mockAlerts);
   }
@@ -28,7 +35,7 @@ export async function fetchAlerts(): Promise<SosAlert[]> {
     throw new Error(`Failed to fetch alerts: ${res.status}`);
   }
   const body = (await res.json()) as BackendAlert[];
-  return toSosAlerts(body);
+  return toSosAlerts(body, clusters);
 }
 
 export async function fetchNotificationState(): Promise<NotificationState> {

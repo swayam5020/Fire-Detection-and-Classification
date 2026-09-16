@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import type { SosAlert } from '@/types/alert';
+import type { ThermalCluster } from '@/types/cluster';
 import { fetchAlerts } from '@/api/alertsApi';
 import { compareTimestampsDesc } from '@/lib/utils';
 import type { AsyncStatus } from './useClusters';
@@ -28,19 +29,37 @@ interface UseAlertArrivalsResult {
  * treated as "new" on initial load); only alert_ids that appear on a later
  * poll and weren't seen before trigger latestArrival.
  */
-export function useAlertArrivals(): UseAlertArrivalsResult {
+export function useAlertArrivals(clusters: ThermalCluster[]): UseAlertArrivalsResult {
   const [alerts, setAlerts] = useState<SosAlert[]>([]);
   const [status, setStatus] = useState<AsyncStatus>('loading');
   const [error, setError] = useState<string | null>(null);
   const [latestArrival, setLatestArrival] = useState<SosAlert | null>(null);
   const seenIds = useRef<Set<string> | null>(null);
 
+  // Read via a ref, not a poll()-effect dependency: clusters refreshes on
+  // its own schedule (and useClusters() gives back a new array reference
+  // every fetch, changed or not), and restarting this poll loop each time
+  // would refetch alerts far more often than the 20s cadence intends. Each
+  // poll tick just needs whatever the latest clusters list is *at that
+  // moment*, not to react to every change.
+  const clustersRef = useRef(clusters);
+  clustersRef.current = clusters;
+
+  // This poll effect fires immediately on mount, at which point clusters is
+  // still `[]` — its own fetch hasn't resolved yet — so a ref-only read
+  // would make that first, immediate poll match every alert against an
+  // empty list and fall back to unmatched raw ids (see toSosAlert). Adding
+  // this as a second effect dependency re-runs the poll loop exactly once,
+  // the moment clusters actually has data, without re-running again on
+  // every later clusters refresh — it only ever flips false→true.
+  const hasClusters = clusters.length > 0;
+
   useEffect(() => {
     let cancelled = false;
 
     async function poll() {
       try {
-        const data = await fetchAlerts();
+        const data = await fetchAlerts(clustersRef.current);
         if (cancelled) return;
 
         if (seenIds.current === null) {
@@ -78,7 +97,7 @@ export function useAlertArrivals(): UseAlertArrivalsResult {
       cancelled = true;
       clearInterval(id);
     };
-  }, []);
+  }, [hasClusters]);
 
   const clearArrival = useCallback(() => setLatestArrival(null), []);
 

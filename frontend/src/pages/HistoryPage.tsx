@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAlerts } from '@/hooks/useAlerts';
+import { useClusters } from '@/hooks/useClusters';
 import { AlertsSummaryBar } from '@/components/alerts/AlertsSummaryBar';
 import { AlertsTable } from '@/components/alerts/AlertsTable';
 import { AlertDetailPanel } from '@/components/alerts/AlertDetailPanel';
@@ -12,7 +13,11 @@ import type { SosAlert } from '@/types/alert';
 // Historical anomaly/SOS record archive — this is the old /alert table,
 // relocated here since /alert is now the single latest-anomaly view.
 export function HistoryPage() {
-  const { alerts, status, error, refetch } = useAlerts();
+  // clusters is fetched only so each alert's cluster_id can be resolved to
+  // the same id ThermalCluster uses — see alertsAdapters.toSosAlert. This
+  // page never renders cluster data itself.
+  const { clusters } = useClusters();
+  const { alerts, status, error, refetch } = useAlerts(clusters);
   const [severityFilter, setSeverityFilter] = useState<SosAlert['severity'] | 'all'>('all');
   const [selectedAlertId, setSelectedAlertId] = useState<string | null>(null);
 

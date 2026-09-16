@@ -22,7 +22,9 @@ function baseFilters(): ClusterFilters {
 
 export function MapPage() {
   const { clusters, status, error, refetch } = useClusters();
-  const { alerts } = useAlerts();
+  // clusters resolves each alert's cluster_id to match ThermalCluster's —
+  // see alertsAdapters.toSosAlert.
+  const { alerts } = useAlerts(clusters);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const requestedClusterId = searchParams.get('cluster');

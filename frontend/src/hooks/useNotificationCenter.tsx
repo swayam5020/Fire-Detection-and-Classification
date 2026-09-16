@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import type { SosAlert } from '@/types/alert';
 import { useNotifications } from './useNotifications';
 import { useAlertArrivals } from './useAlertArrivals';
-import type { AsyncStatus } from './useClusters';
+import { useClusters, type AsyncStatus } from './useClusters';
 
 interface NotificationCenterValue {
   hasUnread: boolean;
@@ -42,9 +42,14 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   // bell always used — acknowledgment is purely a UI-side derivation on
   // top of it, not a separate data source.
   const { hasUnread, unreadCount } = useNotifications();
+  // Needed only so alerts can be cross-referenced to their cluster's actual
+  // (deduped) id — see the comment on alertsAdapters.toSosAlert. This is the
+  // one place in the app that fetches clusters purely for that purpose,
+  // rather than to render them.
+  const { clusters } = useClusters();
   // Polls the same alerts source the rest of the app reads, diffing for
   // arrivals the ringing overlay should announce — see useAlertArrivals.
-  const { alerts, status: alertsStatus, error: alertsError, latestArrival, clearArrival } = useAlertArrivals();
+  const { alerts, status: alertsStatus, error: alertsError, latestArrival, clearArrival } = useAlertArrivals(clusters);
   const [acknowledged, setAcknowledged] = useState(false);
   const [isSosModalOpen, setIsSosModalOpen] = useState(false);
   const location = useLocation();

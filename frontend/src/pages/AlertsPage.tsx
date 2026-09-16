@@ -25,8 +25,10 @@ const SEVERITY_TEXT: Record<string, string> = {
 // telemetry below.
 export function AlertsPage() {
   const navigate = useNavigate();
-  const { alerts, status: alertStatus, error: alertError, refetch: refetchAlerts } = useAlerts();
   const { clusters, status: clusterStatus } = useClusters();
+  // clusters is passed in so each alert's cluster_id can be resolved to the
+  // same id ThermalCluster uses — see alertsAdapters.toSosAlert.
+  const { alerts, status: alertStatus, error: alertError, refetch: refetchAlerts } = useAlerts(clusters);
 
   const latestAlert = useMemo(() => selectLatestAlert(alerts), [alerts]);
   const cluster = useMemo(

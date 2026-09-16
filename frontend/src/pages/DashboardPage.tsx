@@ -21,7 +21,9 @@ import type { ClassificationType } from '@/types/cluster';
 // invented or hardcoded per-component.
 export function DashboardPage() {
   const { clusters, status: clusterStatus, error: clusterError, refetch: refetchClusters } = useClusters();
-  const { alerts, status: alertStatus } = useAlerts();
+  // clusters resolves each alert's cluster_id to match ThermalCluster's —
+  // see alertsAdapters.toSosAlert.
+  const { alerts, status: alertStatus } = useAlerts(clusters);
   const navigate = useNavigate();
 
   const activeClusterIds = useMemo(() => getActiveClusterIds(alerts), [alerts]);

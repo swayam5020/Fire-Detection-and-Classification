@@ -39,7 +39,9 @@ type ClassFilter = ClassificationType | 'all';
  */
 export function ActiveCasesPage() {
   const { clusters, status: clusterStatus, error: clusterError, refetch } = useClusters();
-  const { alerts, status: alertStatus } = useAlerts();
+  // clusters resolves each alert's cluster_id to match ThermalCluster's —
+  // see alertsAdapters.toSosAlert.
+  const { alerts, status: alertStatus } = useAlerts(clusters);
   const navigate = useNavigate();
 
   const [riskFilter, setRiskFilter] = useState<RiskFilter>('all');
