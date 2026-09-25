@@ -68,3 +68,5 @@ ON processed_data(cluster_id);
 
 CREATE INDEX IF NOT EXISTS idx_processed_location
 ON processed_data(centroid_lat, centroid_lon);
+
+-- Database schema and setup for SIH26 thermal anomaly system.
