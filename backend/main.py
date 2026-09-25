@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 from fastapi.middleware.cors import CORSMiddleware
 
 # FastAPI app initialize karna
@@ -16,11 +20,11 @@ app.add_middleware(
 
 # Database connection settings
 DB_CONFIG = {
-    "dbname": "sih26_ntro_db",
-    "user": "postgres",
-    "password": "Suryanshdev@191", # YAHAN APNA PASSWORD DAALNA
-    "host": "localhost",
-    "port": "5432"
+    "dbname": os.getenv("DB_NAME", "sih26_ntro_db"),
+    "user": os.getenv("DB_USER", "paridhilalwani"),
+    "password": os.getenv("DB_PASSWORD", ""),
+    "host": os.getenv("DB_HOST", "localhost"),
+    "port": os.getenv("DB_PORT", "5432")
 }
 
 @app.get("/")
@@ -33,11 +37,11 @@ def get_all_fires():
         # Database se connect karna
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor()
-        
+
         # Dummy data fetch karna
         cur.execute("SELECT event_id, latitude, longitude, frp, confidence FROM firms_raw_data;")
         rows = cur.fetchall()
-        
+
         # Data ko JSON (Dictionary) format mein convert karna
         fires_data = []
         for row in rows:
@@ -53,11 +57,11 @@ def get_all_fires():
         "confidence": row[4]
     }
 })
-            
+
         cur.close()
         conn.close()
-        
+
         return {"type": "FeatureCollection", "features": fires_data}
-        
+
     except Exception as e:
         return {"status": "error", "message": str(e)}

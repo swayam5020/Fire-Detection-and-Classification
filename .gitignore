@@ -14,3 +14,21 @@ coverage/
 .venv/
 __pycache__/
 *.pyc
+# Fire_ML_New generated/local data
+data/worldcover/
+data/raw/
+data/cleaned/
+data/clustered/
+data/persistence/
+data/environment/
+data/infrastructure/
+data/live_raw/
+data/live_clean/
+data/live_clustered/
+data/live_persistence/
+data/live_worldcover/
+data/live_osm/
+data/live_industrial_proximity/
+data/live_ml_input/
+data/screening/
+backend/.env
