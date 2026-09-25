@@ -65,3 +65,4 @@ def get_all_fires():
 
     except Exception as e:
         return {"status": "error", "message": str(e)}
+# Backend API services for the SIH26 thermal anomaly system.
